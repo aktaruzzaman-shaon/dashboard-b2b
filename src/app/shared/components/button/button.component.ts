@@ -9,7 +9,7 @@ import { NgClass } from '@angular/common';
   styleUrl: './button.component.css',
 })
 export class ButtonComponent {
-  
+
   // -------- inputs ------
   label = input<string>('Button');
   disabled = input<boolean>(false);
@@ -43,6 +43,7 @@ export class ButtonComponent {
 
   // ───────── Click handler ─────────
   onClick(): void {
+    console.log('clicked')
     if (this.isDisabled()) return;
     this.buttonClick.emit();
   }
