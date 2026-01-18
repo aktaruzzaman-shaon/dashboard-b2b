@@ -3,10 +3,12 @@ import { ButtonComponent } from './shared/components/button/button.component';
 import { SingleSelectComponent } from './shared/components/select/single-select/single-select.component';
 import { TableComponent } from './shared/components/table/table.component';
 import { CalenderComponent } from './shared/components/calender/calender.component';
+import { StatusButtonData } from './shared/components/status-button/status-button.types';
+import { StatusButton } from "./shared/components/status-button/status-button.component";
 
 @Component({
   selector: 'app-root',
-  imports: [ButtonComponent, SingleSelectComponent, TableComponent, CalenderComponent],
+  imports: [ButtonComponent, SingleSelectComponent, TableComponent, CalenderComponent, StatusButton],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -32,5 +34,23 @@ export class App {
     console.log(date);
     this.travelDateTo.set(date);
     console.log('Travel Date To:', date);
+  }
+
+  // ----- for statu-button-----
+  statuses = signal<StatusButtonData[]>([
+    { label: 'Pending', count: 30, value: 'pending' },
+    { label: 'Approved', count: 12, value: 'approved' },
+    { label: 'Rejected', count: 5, value: 'rejected' },
+  ]);
+
+  activeStatus = signal<string | null>(null);
+  isLoading = signal(false);
+
+  onStatusClick(item: StatusButtonData) {
+    this.activeStatus.set(item.value ?? null);
+
+    // Example: API call
+    this.isLoading.set(true);
+    setTimeout(() => this.isLoading.set(false), 1000);
   }
 }
