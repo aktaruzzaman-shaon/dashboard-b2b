@@ -5,7 +5,9 @@ import { TableComponent } from './shared/components/table/table.component';
 import { CalenderComponent } from './shared/components/calender/calender.component';
 import { StatusButtonData } from './shared/components/status-button/status-button.types';
 import { StatusButton } from './shared/components/status-button/status-button.component';
-import { ToggleButtonComponent } from "./shared/components/toggle-button/toggle-button.component";
+import { ToggleButtonComponent } from './shared/components/toggle-button/toggle-button.component';
+import { DateRangeOption } from './shared/components/input/input-selector/input-selector.types';
+import { InputSelectorComponent } from "./shared/components/input/input-selector/input-selector.component";
 
 @Component({
   selector: 'app-root',
@@ -15,7 +17,8 @@ import { ToggleButtonComponent } from "./shared/components/toggle-button/toggle-
     TableComponent,
     CalenderComponent,
     StatusButton,
-    ToggleButtonComponent
+    ToggleButtonComponent,
+    InputSelectorComponent
 ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -71,6 +74,24 @@ export class App {
 
   onFilterUpdate(isActive: boolean) {
     console.log('Toggle state is now:', isActive);
-    // Logic to filter your data source goes here
+    // Logic to filter data source goes here
+  }
+
+  // Date range selection input
+  availableDateRanges: DateRangeOption[] = [
+    { id: 'today', label: 'Today', value: { type: 'relative', val: 0 } },
+    { id: 'tomorrow', label: 'Tomorrow', value: { type: 'relative', val: 1 } },
+    { id: 'd3-d7', label: 'Day 3 to Day 7', value: { type: 'range', start: 3, end: 7 } },
+    { id: 'd7-d15', label: 'Day 7 to Day 15', value: { type: 'range', start: 7, end: 15 } },
+    { id: 'd15-plus', label: 'Day 15 & Beyond', value: { type: 'range', start: 15, end: null } },
+    { id: 'last-90', label: 'Last 90 days', value: { type: 'lookback', days: 90 } },
+  ];
+
+  currentSelection: DateRangeOption[] = [];
+
+  onDateRangeSelected(selectedItems: DateRangeOption[]) {
+    console.log('Received new selection:', selectedItems);
+    this.currentSelection = selectedItems;
+    // API calls or filtering based on this data
   }
 }
