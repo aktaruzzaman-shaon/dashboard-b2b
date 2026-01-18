@@ -38,19 +38,18 @@
         @for (item of filteredItems(); track item.label) {
           <li
             (click)="select(item)"
-            class="flex items-center gap-3 px-4 py-2 cursor-pointer border-y border-gray-200 hover:bg-gray-100"
+            class="flex justify-between gap-3 px-4 py-2 cursor-pointer border-y border-gray-200 hover:bg-gray-100"
             [class.bg-sky-100]="selectedItem()?.label === item.label"
           >
-            <!-- Rounded Indicator -->
-            <span
-              class="h-3 w-3 rounded-full border"
-              [class.bg-sky-500]="selectedItem()?.label === item.label"
-              [class.border-sky-500]="selectedItem()?.label === item.label"
-            ></span>
-
             <span class="text-black">
               {{ item.label }}
             </span>
+            <!-- Rounded Indicator -->
+            <span
+              class="h-3 w-3 rounded-full ring-2 ring-offset-[5px] ring-gray-300"
+              [class.bg-sky-500]="selectedItem()?.label === item.label"
+              [class.border-sky-500]="selectedItem()?.label === item.label"
+            ></span>
           </li>
         }
 

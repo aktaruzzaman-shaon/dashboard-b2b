@@ -12,9 +12,9 @@ import { SingleSelectComponent } from './shared/components/select/single-select/
 export class App {
   protected readonly title = signal('dashboard');
   options = [
-    { label: 'Apple', value: 1 },
-    { label: 'Banana', value: 2 },
-    { label: 'Orange', value: 3 },
+    { label: 'Dubai ', value: 1 },
+    { label: 'Abu Dhabi', value: 2 },
+    { label: 'Shariah', value: 3 },
   ];
 
   onSelect(item: any) {

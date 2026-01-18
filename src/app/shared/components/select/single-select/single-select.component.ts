@@ -9,16 +9,16 @@ import { SelectItem } from '../select.types';
 })
 export class SingleSelectComponent {
   // ───────── Inputs ─────────
-  items = input<SelectItem<string>[]>([]);
+  items = input<SelectItem<number>[]>([]);
   placeholder = input<string>('Select option');
 
   // ───────── Output ─────────
-  selectChange = output<SelectItem<string>>();
+  selectChange = output<SelectItem<number>>();
 
   // ───────── Internal State ─────────
   isOpen = signal(false);
   searchTerm = signal('');
-  selectedItem = signal<SelectItem<string> | null>(null);
+  selectedItem = signal<SelectItem<number> | null>(null);
 
   // ───────── Computed ─────────
   filteredItems = computed(() => {
@@ -38,9 +38,9 @@ export class SingleSelectComponent {
     this.searchTerm.set('');
   }
 
-  select(item: SelectItem<string>): void {
+  select(item: SelectItem<number>): void {
     this.selectedItem.set(item);
-    this.isOpen.set(false);
+    // this.isOpen.set(false);
     this.selectChange.emit(item);
   }
 }
