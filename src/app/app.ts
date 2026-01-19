@@ -8,7 +8,8 @@ import { StatusButton } from './shared/components/status-button/status-button.co
 import { ToggleButtonComponent } from './shared/components/toggle-button/toggle-button.component';
 import { DateRangeOption } from './shared/components/input/input-selector/input-selector.types';
 import { InputSelectorComponent } from './shared/components/input/input-selector/input-selector.component';
-import { ModalComponent } from "./shared/components/modal/modal.component";
+import { ModalComponent } from './shared/components/modal/modal.component';
+import { InputCoreComponent } from './shared/components/input/input-core/input-core.component';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +21,9 @@ import { ModalComponent } from "./shared/components/modal/modal.component";
     StatusButton,
     ToggleButtonComponent,
     InputSelectorComponent,
-    ModalComponent
-],
+    ModalComponent,
+    InputCoreComponent,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -120,6 +122,23 @@ export class App {
 
       this.isSubmitting.set(false);
       this.isModalOpen.set(false);
+    }, 1500);
+  }
+
+  //input-core usage example
+  username = signal('');
+  email = signal('');
+  loading = signal(false);
+
+  submit() {
+    this.loading.set(true);
+
+    setTimeout(() => {
+      console.log({
+        username: this.username(),
+        email: this.email(),
+      });
+      this.loading.set(false);
     }, 1500);
   }
 }
