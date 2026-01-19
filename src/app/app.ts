@@ -10,7 +10,8 @@ import { DateRangeOption } from './shared/components/input/input-selector/input-
 import { InputSelectorComponent } from './shared/components/input/input-selector/input-selector.component';
 import { ModalComponent } from './shared/components/modal/modal.component';
 import { InputCoreComponent } from './shared/components/input/input-core/input-core.component';
-import { DateSlider } from "./shared/components/date-slider/date-slider";
+import { DateSlider } from './shared/components/date-slider/date-slider';
+import { OutlineButton } from "./shared/components/outline-button/outline-button";
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,8 @@ import { DateSlider } from "./shared/components/date-slider/date-slider";
     InputSelectorComponent,
     ModalComponent,
     InputCoreComponent,
-    DateSlider
+    DateSlider,
+    OutlineButton
 ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -171,5 +173,17 @@ export class App {
 
   onDateClick(date: Date) {
     console.log('User selected specific day:', date);
+  }
+
+  //button-outltine usage
+  isSaving = signal(false);
+
+  onUpdate() {
+    console.log('Update Supplier Clicked');
+  }
+
+  onSave() {
+    this.isSaving.set(true);
+    setTimeout(() => this.isSaving.set(false), 2000);
   }
 }
