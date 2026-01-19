@@ -9,17 +9,14 @@ import { NgClass } from '@angular/common';
   styleUrl: './button.component.css',
 })
 export class ButtonComponent {
-  // -------- inputs ------
   label = input<string>('Button');
   disabled = input<boolean>(false);
   loading = input<boolean>(false);
   variant = input<ButtonVariant>('solid');
   size = input<ButtonSize>('md');
 
-  // ───────── Output ─────────
   buttonClick = output<void>();
 
-  // ───────── Computed classes ─────────
   sizeClasses = computed(() => {
     switch (this.size()) {
       case 'sm':
@@ -40,7 +37,6 @@ export class ButtonComponent {
 
   isDisabled = computed(() => this.disabled() || this.loading());
 
-  // ───────── Click handler ─────────
   onClick(): void {
     console.log('clicked');
     if (this.isDisabled()) return;

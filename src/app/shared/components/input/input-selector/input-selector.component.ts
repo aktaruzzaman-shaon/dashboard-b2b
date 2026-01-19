@@ -8,23 +8,13 @@ import { DateRangeOption } from './input-selector.types';
   styleUrl: './input-selector.component.css',
 })
 export class InputSelectorComponent {
-  // --- Signal Inputs ---
   label = input.required<string>();
   options = input.required<DateRangeOption[]>();
-  // Example of a non-required input with a default value
   disabled = input<boolean>(false); 
-
-  // --- Outputs ---
   selectionChange = output<DateRangeOption[]>();
-
-  // --- Dependency Injection ---
   private elementRef = inject(ElementRef);
-
-  // --- Internal State (Signals) ---
   isOpen = signal<boolean>(false);
   selectedOptions = signal<DateRangeOption[]>([]);
-
-  // --- Derived State (Computed) ---
   selectedIds = computed(() => new Set(this.selectedOptions().map(o => o.id)));
 
   toggleDropdown() {
