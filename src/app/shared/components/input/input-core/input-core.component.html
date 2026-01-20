@@ -1,68 +1,69 @@
-<div class="w-full">
-  
-  <!-- Label -->
-  @if (label()) {
-    <label class="block mb-1 text-sm font-medium text-gray-700">
-      {{ label() }}
-      @if (required()) {
-        <span class="text-red-500">*</span>
-      }
-    </label>
-  }
-
-  <!-- Input Wrapper -->
-  <div
-    class="relative flex items-center border bg-white transition-colors focus-within:ring-2"
-    [class.border-red-500]="hasError()"
-    [class.focus-within:ring-red-200]="hasError()"
-    [class.border-gray-300]="!hasError()"
-    [class.focus-within:ring-sky-200]="!hasError()"
-    [ngClass]="[
-      size() === 'sm' ? 'text-sm' : '',
-      size() === 'md' ? 'text-base' : '',
-      size() === 'lg' ? 'text-lg' : '',
-      rounded() === 'sm' ? 'rounded-md' : '',
-      rounded() === 'md' ? 'rounded-lg' : '',
-      rounded() === 'lg' ? 'rounded-xl' : '',
-      rounded() === 'full' ? 'rounded-full' : '',
-    ]"
-  >
-    <!-- Input -->
-    <input
-      class="w-full bg-transparent outline-none px-4 py-2 text-gray-900 placeholder-gray-400 disabled:cursor-not-allowed"
-      [type]="type()"
-      [value]="value()"
-      [placeholder]="placeholder()"
-      [disabled]="disabled()"
-      [readonly]="readonly()"
-      (input)="onInput($event)"
-    />
-
-    <!-- Clear Button -->
-    @if (clearable() && value()) {
-      <button type="button" (click)="clear()" class="pr-3 text-gray-400 hover:text-gray-600">
-        ✕
-      </button>
+<div class="app-container">
+  <div class="w-full">
+    <!-- Label -->
+    @if (label()) {
+      <label class="block mb-1 text-sm font-medium text-gray-700">
+        {{ label() }}
+        @if (required()) {
+          <span class="text-red-500">*</span>
+        }
+      </label>
     }
 
-    <!-- Loading Spinner -->
-    @if (loading()) {
-      <span class="pr-3">
-        <span
-          class="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"
-        ></span>
-      </span>
+    <!-- Input Wrapper -->
+    <div
+      class="relative flex items-center border bg-white transition-colors focus-within:ring-2"
+      [class.border-red-500]="hasError()"
+      [class.focus-within:ring-red-200]="hasError()"
+      [class.border-gray-300]="!hasError()"
+      [class.focus-within:ring-sky-200]="!hasError()"
+      [ngClass]="[
+        size() === 'sm' ? 'text-sm' : '',
+        size() === 'md' ? 'text-base' : '',
+        size() === 'lg' ? 'text-lg' : '',
+        rounded() === 'sm' ? 'rounded-md' : '',
+        rounded() === 'md' ? 'rounded-lg' : '',
+        rounded() === 'lg' ? 'rounded-xl' : '',
+        rounded() === 'full' ? 'rounded-full' : '',
+      ]"
+    >
+      <!-- Input -->
+      <input
+        class="w-full bg-transparent outline-none px-4 py-2 text-gray-900 placeholder-gray-400 disabled:cursor-not-allowed"
+        [type]="type()"
+        [value]="value()"
+        [placeholder]="placeholder()"
+        [disabled]="disabled()"
+        [readonly]="readonly()"
+        (input)="onInput($event)"
+      />
+
+      <!-- Clear Button -->
+      @if (clearable() && value()) {
+        <button type="button" (click)="clear()" class="pr-3 text-gray-400 hover:text-gray-600">
+          ✕
+        </button>
+      }
+
+      <!-- Loading Spinner -->
+      @if (loading()) {
+        <span class="pr-3">
+          <span
+            class="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"
+          ></span>
+        </span>
+      }
+    </div>
+
+    <!-- Error -->
+    @if (hasError()) {
+      <p class="mt-1 text-sm text-red-500">
+        {{ error() }}
+      </p>
+    } @else if (hint()) {
+      <p class="mt-1 text-sm text-gray-500">
+        {{ hint() }}
+      </p>
     }
   </div>
-
-  <!-- Error -->
-  @if (hasError()) {
-    <p class="mt-1 text-sm text-red-500">
-      {{ error() }}
-    </p>
-  } @else if (hint()) {
-    <p class="mt-1 text-sm text-gray-500">
-      {{ hint() }}
-    </p>
-  }
 </div>

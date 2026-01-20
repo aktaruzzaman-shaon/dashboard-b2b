@@ -1,62 +1,64 @@
-<div class="relative w-full max-w-sm">
-  <!-- Select Field -->
-  <div
-    (click)="toggle()"
-    class="flex items-center justify-between px-4 py-2 cursor-pointer rounded-md bg-gray-100 text-black border border-gray-300"
-  >
-    <span class="truncate">
-      {{ displayLabel() }}
-    </span>
-
-    <!-- Arrow -->
-    <svg
-      class="h-4 w-4 transition-transform duration-200"
-      [class.rotate-180]="isOpen()"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
+<div class="app-container">
+  <div class="relative w-full max-w-sm">
+    <!-- Select Field -->
+    <div
+      (click)="toggle()"
+      class="flex items-center justify-between px-4 py-2 cursor-pointer rounded-md bg-gray-100 text-black border border-gray-300"
     >
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </div>
+      <span class="truncate">
+        {{ displayLabel() }}
+      </span>
 
-  <!-- Dropdown -->
-  @if (isOpen()) {
-    <div class="absolute z-50  w-full rounded-md border border-gray-300 bg-white shadow-sm">
-      <!-- Search -->
-      <div class="p-2 ">
-        <input
-          type="text"
-          placeholder="Search..."
-          class="w-full rounded-md px-3 py-1.5 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-400"
-          (input)="searchTerm.set($any($event.target).value)"
-        />
-      </div>
-
-      <!-- Items -->
-      <ul class="max-h-60 overflow-y-auto">
-        @for (item of filteredItems(); track item.label) {
-          <li
-            (click)="select(item)"
-            class="flex justify-between gap-3 px-4 py-2 cursor-pointer border-y border-gray-200 hover:bg-gray-100"
-            [class.bg-sky-100]="selectedItem()?.label === item.label"
-          >
-            <span class="text-black">
-              {{ item.label }}
-            </span>
-            <!-- Rounded Indicator -->
-            <span
-              class="h-3 w-3 rounded-full ring-2 ring-offset-[5px] ring-gray-300"
-              [class.bg-sky-500]="selectedItem()?.label === item.label"
-              [class.border-sky-500]="selectedItem()?.label === item.label"
-            ></span>
-          </li>
-        }
-
-        @if (filteredItems().length === 0) {
-          <li class="px-4 py-2 text-gray-400 text-sm">No results found</li>
-        }
-      </ul>
+      <!-- Arrow -->
+      <svg
+        class="h-4 w-4 transition-transform duration-200"
+        [class.rotate-180]="isOpen()"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
     </div>
-  }
+
+    <!-- Dropdown -->
+    @if (isOpen()) {
+      <div class="absolute z-50 w-full rounded-md border border-gray-300 bg-white shadow-sm">
+        <!-- Search -->
+        <div class="p-2">
+          <input
+            type="text"
+            placeholder="Search..."
+            class="w-full rounded-md px-3 py-1.5 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-400"
+            (input)="searchTerm.set($any($event.target).value)"
+          />
+        </div>
+
+        <!-- Items -->
+        <ul class="max-h-60 overflow-y-auto">
+          @for (item of filteredItems(); track item.label) {
+            <li
+              (click)="select(item)"
+              class="flex justify-between gap-3 px-4 py-2 cursor-pointer border-y border-gray-200 hover:bg-gray-100"
+              [class.bg-sky-100]="selectedItem()?.label === item.label"
+            >
+              <span class="text-black">
+                {{ item.label }}
+              </span>
+              <!-- Rounded Indicator -->
+              <span
+                class="h-3 w-3 rounded-full ring-2 ring-offset-[5px] ring-gray-300"
+                [class.bg-sky-500]="selectedItem()?.label === item.label"
+                [class.border-sky-500]="selectedItem()?.label === item.label"
+              ></span>
+            </li>
+          }
+
+          @if (filteredItems().length === 0) {
+            <li class="px-4 py-2 text-gray-400 text-sm">No results found</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
 </div>
