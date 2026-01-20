@@ -1,5 +1,8 @@
+@if (isOpen()) {
+  <div class="fixed inset-0 z-40 bg-black/30 transition-opacity"></div>
+}
 <div class="app-container">
-  <div class="relative w-full max-w-sm">
+  <div class="relative w-full max-w-sm" [class.z-50]="isOpen()">
     <!-- Select Field -->
     <div
       (click)="toggle()"
@@ -9,7 +12,6 @@
         {{ displayLabel() }}
       </span>
 
-      <!-- Arrow -->
       <svg
         class="h-4 w-4 transition-transform duration-200"
         [class.rotate-180]="isOpen()"
@@ -23,7 +25,7 @@
 
     <!-- Dropdown -->
     @if (isOpen()) {
-      <div class="absolute z-50 w-full rounded-md border border-gray-300 bg-white shadow-sm">
+      <div class="absolute z-50 w-full mt-2 rounded-md border border-gray-300 bg-white shadow-sm">
         <!-- Search -->
         <div class="p-2">
           <input

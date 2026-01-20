@@ -68,7 +68,6 @@ export class App {
   onStatusClick(item: StatusButtonData) {
     this.activeStatus.set(item.value ?? null);
 
-    // Example: API call
     this.isLoading.set(true);
     setTimeout(() => this.isLoading.set(false), 1000);
   }
