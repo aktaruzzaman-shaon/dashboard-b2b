@@ -24,7 +24,7 @@ export class ModalComponent {
     return map[this.size()];
   });
 
-  // ───────── UI Config ─────────
+  // ui config
   hideFooter = input<boolean>(false);
   disableBackdropClose = input<boolean>(false);
 
@@ -33,11 +33,9 @@ export class ModalComponent {
   disableSubmit = input<boolean>(false);
   loading = input<boolean>(false);
 
-  // ───────── Outputs ─────────
   close = output<void>();
   submit = output<void>();
 
-  // ───────── Actions ─────────
   onClose(): void {
     if (this.disableBackdropClose()) return;
     this.close.emit();

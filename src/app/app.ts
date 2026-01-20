@@ -11,7 +11,7 @@ import { InputSelectorComponent } from './shared/components/input/input-selector
 import { ModalComponent } from './shared/components/modal/modal.component';
 import { InputCoreComponent } from './shared/components/input/input-core/input-core.component';
 import { DateSlider } from './shared/components/date-slider/date-slider';
-import { OutlineButton } from "./shared/components/outline-button/outline-button";
+import { OutlineButton } from './shared/components/outline-button/outline-button';
 
 @Component({
   selector: 'app-root',
@@ -26,8 +26,8 @@ import { OutlineButton } from "./shared/components/outline-button/outline-button
     ModalComponent,
     InputCoreComponent,
     DateSlider,
-    OutlineButton
-],
+    OutlineButton,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -58,8 +58,8 @@ export class App {
   // ----- for statu-button-----
   statuses = signal<StatusButtonData[]>([
     { label: 'Pending', count: 30, value: 'pending' },
-    { label: 'Approved', count: 12, value: 'approved' },
-    { label: 'Rejected', count: 5, value: 'rejected' },
+    // { label: 'Approved', count: 12, value: 'approved' },
+    // { label: 'Rejected', count: 5, value: 'rejected' },
   ]);
 
   activeStatus = signal<string | null>(null);
