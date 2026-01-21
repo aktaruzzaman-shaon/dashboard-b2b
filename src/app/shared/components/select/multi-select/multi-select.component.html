@@ -1,0 +1,72 @@
+
+
+@if (isVisible()) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black30/40 backdrop-blur-[2px] p-4"
+  >
+    <div
+      class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+    >
+      <div class="p-5 border-b border-gray-100">
+        <div class="relative">
+          <input
+            type="text"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="searchTerm.set($event)"
+            placeholder="Search product..."
+            class="w-full pl-4 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all placeholder:text-gray-400"
+          />
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-y-auto">
+        @for (option of filteredOptions(); track option.id) {
+          <div
+            class="flex items-center justify-between px-6 py-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors"
+            (click)="option.selected = !option.selected"
+          >
+            <span class="text-gray-700 font-medium truncate mr-4">{{ option.label }}</span>
+
+            <input
+              type="checkbox"
+              [(ngModel)]="option.selected"
+              (click)="$event.stopPropagation()"
+              class="w-6 h-6 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer"
+            />
+          </div>
+        } @empty {
+          <div class="p-10 text-center text-gray-400">
+            No products found matching "{{ searchTerm() }}"
+          </div>
+        }
+      </div>
+
+      <div class="p-4 bg-white border-t border-gray-100 flex justify-between items-center">
+        <div class="flex gap-4">
+          <!-- <button
+            (click)="resetAll()"
+            class="text-sm font-bold text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            Reset
+          </button> -->
+        </div>
+
+        <div class="flex items-center gap-6">
+          <button
+            (click)="toggleSelectAll()"
+            class="text-[15px] font-bold text-[#3182ce] hover:text-blue-800 transition-colors"
+          >
+            Select All
+          </button>
+
+          <button
+            (click)="submit()"
+            class="bg-blue-600 text-white px-5 py-2 rounded-xl font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

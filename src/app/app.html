@@ -104,5 +104,20 @@
         </svg>
       </app-outline-button>
     </div>
+
+    <!-- MultiSelect Usage Example -->
+    <button
+      (click)="isModalOpen.set(true)"
+      class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow"
+    >
+      Open Selection
+    </button>
+    <app-multi-select
+      [(isVisible)]="isModalOpen"
+      [options]="products()"
+      (selectedValues)="onSelectionConfirmed($event)"
+    >
+      ></app-multi-select
+    >
   </div>
 </div>

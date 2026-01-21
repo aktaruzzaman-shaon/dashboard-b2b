@@ -12,6 +12,14 @@ import { ModalComponent } from './shared/components/modal/modal.component';
 import { InputCoreComponent } from './shared/components/input/input-core/input-core.component';
 import { DateSlider } from './shared/components/date-slider/date-slider';
 import { OutlineButton } from './shared/components/outline-button/outline-button';
+import { MultiSelect } from './shared/components/select/multi-select/multi-select.component';
+
+//MultiSelect option ITEM
+interface OptionItem {
+  id: string | number;
+  label: string;
+  selected?: boolean;
+}
 
 @Component({
   selector: 'app-root',
@@ -27,6 +35,7 @@ import { OutlineButton } from './shared/components/outline-button/outline-button
     InputCoreComponent,
     DateSlider,
     OutlineButton,
+    MultiSelect,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -184,5 +193,24 @@ export class App {
   onSave() {
     this.isSaving.set(true);
     setTimeout(() => this.isSaving.set(false), 2000);
+  }
+
+  //multi select component
+
+  isModalOpenMultiSelect = signal(false);
+  products = signal<OptionItem[]>([
+    { id: 1, label: 'From Dubai Marina Sightseeing 1', selected: false },
+    { id: 2, label: 'From Dubai Marina Sightseeing 2', selected: false },
+    { id: 3, label: 'From Dubai Marina Sightseeing 3', selected: false },
+    { id: 4, label: 'From Dubai Marina Sightseeing 4', selected: false },
+    { id: 5, label: 'From Dubai Marina Sightseeing 5', selected: false },
+  ]);
+  finalSelection = signal<OptionItem[]>([]);
+  openSelector() {
+    this.isModalOpenMultiSelect.set(true);
+  }
+  onSelectionConfirmed(selectedItems: OptionItem[]) {
+    this.finalSelection.set(selectedItems);
+    console.log('Final Selected Data:', selectedItems);
   }
 }
