@@ -8,19 +8,17 @@ import { SelectItem } from '../select.types';
   styleUrl: './single-select.component.css',
 })
 export class SingleSelectComponent {
-  // ───────── Inputs ─────────
+
   items = input<SelectItem<number>[]>([]);
   placeholder = input<string>('Select option');
 
-  // ───────── Output ─────────
+
   selectChange = output<SelectItem<number>>();
 
-  // ───────── Internal State ─────────
   isOpen = signal(false);
   searchTerm = signal('');
   selectedItem = signal<SelectItem<number> | null>(null);
 
-  // ───────── Computed ─────────
   filteredItems = computed(() => {
     const term = this.searchTerm().toLowerCase();
     return this.items().filter((item) => item.label.toLowerCase().includes(term));
@@ -32,7 +30,6 @@ export class SingleSelectComponent {
     return this.placeholder();
   });
 
-  // ───────── Actions ─────────
   toggle(): void {
     this.isOpen.update((v) => !v);
     this.searchTerm.set('');
@@ -40,7 +37,6 @@ export class SingleSelectComponent {
 
   select(item: SelectItem<number>): void {
     this.selectedItem.set(item);
-    // this.isOpen.set(false);
     this.selectChange.emit(item);
   }
 }
