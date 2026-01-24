@@ -13,6 +13,7 @@ import { InputCoreComponent } from './shared/components/input/input-core/input-c
 import { DateSlider } from './shared/components/date-slider/date-slider';
 import { OutlineButton } from './shared/components/outline-button/outline-button';
 import { MultiSelect } from './shared/components/select/multi-select/multi-select.component';
+import { B2bDashboard } from "./b2b-dashboard/b2b-dashboard";
 
 //MultiSelect option ITEM
 interface OptionItem {
@@ -36,7 +37,8 @@ interface OptionItem {
     DateSlider,
     OutlineButton,
     MultiSelect,
-  ],
+    B2bDashboard
+],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
