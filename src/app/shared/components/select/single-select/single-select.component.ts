@@ -14,7 +14,7 @@ export class SingleSelectComponent {
   placeholder = input<string>('Select option');
   selectChange = output<SelectItem<number>>();
   label = input<string>('');
-
+  
   isOpen = signal(false);
   searchTerm = signal('');
   selectedItem = signal<SelectItem<number> | null>(null);
