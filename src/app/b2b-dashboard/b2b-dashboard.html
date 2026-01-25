@@ -1,5 +1,5 @@
 <div class="">
-  <div class="app-container flex">
+  <div class="app-container flex flex-wrap items-end gap-4 w-full p-4">
     <!-- ==========Travel Date range selection input ===========-->
     <app-input-selector
       label="Travel Date Range"
@@ -25,9 +25,19 @@
 
     <!-- ========== Supplier Status =========== -->
     <app-select-menu
-      label="Project Category"
+      label="Supplier Status"
       [options]="roleOptions()"
-      (onSelection)="doSomething($event)"
+      placeholder="Choose an Action"
+      (onSelection)="handleData($event)"
+    >
+    </app-select-menu>
+
+    <!-- ========== Yacht Type =========== -->
+    <app-select-menu
+      label="Yacht Type"
+      [options]="roleOptions()"
+      placeholder="Choose an Action"
+      (onSelection)="handleData($event)"
     >
     </app-select-menu>
 

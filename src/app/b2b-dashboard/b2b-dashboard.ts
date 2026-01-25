@@ -4,12 +4,18 @@ import { DateRangeOption } from '../shared/components/input/input-selector/input
 import { CalenderComponent } from '../shared/components/calender/calender.component';
 import { SingleSelectComponent } from '../shared/components/select/single-select/single-select.component';
 import { InputCoreComponent } from '../shared/components/input/input-core/input-core.component';
+import { SelectMenuComponent } from '../shared/components/select/select-menu/select-menu';
 import { SelectMenu } from '../shared/components/select/select-menu/selectMenu.type';
-import { SelectMenu, SelectMenu_1 as SelectMenu } from "../shared/components/select/select-menu/select-menu";
 
 @Component({
   selector: 'app-b2b-dashboard',
-  imports: [InputSelectorComponent, CalenderComponent, SingleSelectComponent, InputCoreComponent, ],
+  imports: [
+    InputSelectorComponent,
+    CalenderComponent,
+    SingleSelectComponent,
+    InputCoreComponent,
+    SelectMenuComponent,
+  ],
   templateUrl: './b2b-dashboard.html',
   styleUrl: './b2b-dashboard.css',
 })
@@ -51,34 +57,65 @@ export class B2bDashboard {
     console.log('Selected item:', item);
   }
 
-  //Select Menu  ====================================
+  //Supplier Status ====================================
   roleOptions = signal<SelectMenu[]>([
     {
       id: 'fe',
-      label: 'Frontend Engineer',
+      label: 'Accepted',
       value: { access: ['Tailwind', 'Angular'], level: 'Senior', salary_band: 'A' },
     },
     {
       id: 'be',
-      label: 'Backend Developer',
+      label: 'Rejected',
       value: { access: ['NodeJS', 'PostgreSQL'], level: 'Mid', salary_band: 'B' },
     },
     {
       id: 'qa',
-      label: 'QA Specialist',
+      label: 'Pending',
       value: { access: ['Cypress', 'Playwright'], level: 'Lead', salary_band: 'A' },
     },
     {
       id: 'de',
-      label: 'DevOps Architect',
+      label: 'Cancelled',
       value: { access: ['AWS', 'Kubernetes'], level: 'Staff', salary_band: 'S' },
     },
   ]);
 
   selectedData = signal<any>(null);
 
-  handleUserSelection(data: any) {
+  handleData(data: any) {
     console.log('Component Emitted:', data);
     this.selectedData.set(data);
   }
+
+  //Yacht Type =========================================
+  // oleOptions = signal<SelectMenu[]>([
+  //   {
+  //     id: 'fe',
+  //     label: 'Accepted',
+  //     value: { access: ['Tailwind', 'Angular'], level: 'Senior', salary_band: 'A' },
+  //   },
+  //   {
+  //     id: 'be',
+  //     label: 'Rejected',
+  //     value: { access: ['NodeJS', 'PostgreSQL'], level: 'Mid', salary_band: 'B' },
+  //   },
+  //   {
+  //     id: 'qa',
+  //     label: 'Pending',
+  //     value: { access: ['Cypress', 'Playwright'], level: 'Lead', salary_band: 'A' },
+  //   },
+  //   {
+  //     id: 'de',
+  //     label: 'Cancelled',
+  //     value: { access: ['AWS', 'Kubernetes'], level: 'Staff', salary_band: 'S' },
+  //   },
+  // ]);
+
+  // selectedData = signal<any>(null);
+
+  // handleData(data: any) {
+  //   console.log('Component Emitted:', data);
+  //   this.selectedData.set(data);
+  // }
 }
