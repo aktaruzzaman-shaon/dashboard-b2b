@@ -1,6 +1,6 @@
 <div class="">
   <div class="app-container flex flex-wrap items-end gap-4 w-full p-4">
-    <!-- ==========Travel Date range selection input ===========-->
+    <!-- ======Travel Date range selection input ========-->
     <app-input-selector
       label="Travel Date Range"
       [options]="availableDateRanges"
@@ -21,7 +21,7 @@
     ></app-calender>
 
     <!-- ========== City Select =========== -->
-    <app-single-select [items]="options" (selectChange)="onSelect($event)"></app-single-select>
+    <app-single-select label="City" [items]="options" (selectChange)="onSelect($event)"></app-single-select>
 
     <!-- ========== Supplier Status =========== -->
     <app-select-menu

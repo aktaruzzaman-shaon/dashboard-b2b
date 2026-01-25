@@ -62,14 +62,14 @@
 
     @if (isOpen()) {
       <div
-        class="absolute z-50 mt-2 w-full p-4 bg-white rounded-xl border border-gray-200 shadow-xl animate-fadeInDown origin-top"
+        class="absolute z-50 mt-2 w-max max-w-[30vw] md:max-w-max p-4 bg-white rounded-xl border border-gray-200 shadow-xl animate-fadeInDown origin-top"
       >
-        <div class="grid grid-cols-2 gap-3">
+        <div class="flex gap-2 ">
           @for (option of options(); track option.id) {
             <button
               type="button"
               (click)="handleSelect(option)"
-              class="py-2 px-3 text-sm font-medium border rounded-lg transition-all focus:outline-none"
+              class="py-1 px-1 text-sm font-medium border rounded-lg transition-all focus:outline-none"
               [class.border-blue-500]="selectedIds().has(option.id)"
               [class.bg-blue-50]="selectedIds().has(option.id)"
               [class.text-blue-600]="selectedIds().has(option.id)"
@@ -83,7 +83,7 @@
           }
         </div>
 
-        <div class="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-gray-100">
+        <!-- <div class="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-gray-100">
           <button
             class="py-2 px-3 text-sm font-medium border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 bg-white"
           >
@@ -94,7 +94,7 @@
           >
             Custom
           </button>
-        </div>
+        </div> -->
       </div>
     }
   </div>

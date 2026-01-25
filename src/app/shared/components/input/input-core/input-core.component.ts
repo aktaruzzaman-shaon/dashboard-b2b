@@ -8,6 +8,7 @@ import { rounded, size } from './input-core.types';
   templateUrl: './input-core.component.html',
   styleUrl: './input-core.component.css',
 })
+
 export class InputCoreComponent {
   label = input<string>('');
   placeholder = input<string>('');

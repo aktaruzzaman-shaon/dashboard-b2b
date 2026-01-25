@@ -13,6 +13,7 @@ export class SingleSelectComponent {
   items = input<SelectItem<number>[]>([]);
   placeholder = input<string>('Select option');
   selectChange = output<SelectItem<number>>();
+  label = input<string>('');
 
   isOpen = signal(false);
   searchTerm = signal('');
