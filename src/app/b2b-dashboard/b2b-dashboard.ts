@@ -7,6 +7,8 @@ import { InputCoreComponent } from '../shared/components/input/input-core/input-
 import { SelectMenuComponent } from '../shared/components/select/select-menu/select-menu';
 import { SelectMenu } from '../shared/components/select/select-menu/selectMenu.type';
 import { ToggleComponentContainer } from '../shared/components/container/toggle-component-container/toggle-component-container';
+import { StatusButton } from '../shared/components/status-button/status-button.component';
+import { StatusButtonData } from '../shared/components/status-button/status-button.types';
 
 @Component({
   selector: 'app-b2b-dashboard',
@@ -17,6 +19,7 @@ import { ToggleComponentContainer } from '../shared/components/container/toggle-
     InputCoreComponent,
     SelectMenuComponent,
     ToggleComponentContainer,
+    StatusButton,
   ],
   templateUrl: './b2b-dashboard.html',
   styleUrl: './b2b-dashboard.css',
@@ -126,5 +129,23 @@ export class B2bDashboard {
   }
   close() {
     this.isContainerOpen.set(false);
+  }
+
+  //Table proftion===========================
+  statuses = signal<StatusButtonData[]>([
+    { label: 'Pending', count: 30, value: 'pending' },
+    { label: 'Approved', count: 12, value: 'approved' },
+    { label: 'Rejected', count: 5, value: 'rejected' },
+    { label: 'ALL', count: 5, value: 'all' },
+  ]);
+
+  activeStatus = signal<string | null>(null);
+  isLoading = signal(false);
+
+  onStatusClick(item: StatusButtonData) {
+    this.activeStatus.set(item.value ?? null);
+
+    this.isLoading.set(true);
+    setTimeout(() => this.isLoading.set(false), 1000);
   }
 }
