@@ -90,10 +90,10 @@ export class TableComponent {
   //   console.log('Sort by:', header);
   // }
 
-  // onReferenceDetails(booking: Booking): void {
-  //   console.log('Reference details clicked:', booking);
-  //   // Will open modal later
-  // }
+  onReferenceDetails(booking: Booking): void {
+    console.log('Reference details clicked:', booking);
+    // Will open modal later
+  }
 
   // onOptionNameClick(booking: Booking): void {
   //   console.log('Option name clicked:', booking);
