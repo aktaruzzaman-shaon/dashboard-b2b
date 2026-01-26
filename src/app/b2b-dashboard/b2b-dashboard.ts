@@ -12,6 +12,7 @@ import { StatusButtonData } from '../shared/components/status-button/status-butt
 import { ToggleButtonComponent } from '../shared/components/toggle-button/toggle-button.component';
 import { TableComponent } from '../shared/components/table/table.component';
 import { SettingsButton } from '../shared/components/button/settings-button/settings-button';
+import { OutlineButton } from "../shared/components/outline-button/outline-button";
 type ColumnKey = string;
 
 @Component({
@@ -27,7 +28,8 @@ type ColumnKey = string;
     ToggleButtonComponent,
     TableComponent,
     SettingsButton,
-  ],
+    OutlineButton
+],
   templateUrl: './b2b-dashboard.html',
   styleUrl: './b2b-dashboard.css',
 })

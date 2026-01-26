@@ -77,8 +77,8 @@
           />
         }
       </div>
+      <!-- table column  customization button -->
       <div>
-        <!-- <div (click)="openTableRowModificationContainer()">Open</div> -->
         <app-settings-button
           label="Column Selection"
           buttonLabel="Default"
@@ -108,6 +108,17 @@
     </div>
     <div>
       <app-table [columns]="tableColumns" [columnVisibility]="columnVisibility()"></app-table>
+    </div>
+    <!-- ================= Table Final Updating Portion=============== -->
+
+    <div class="mt-5">
+      <div class="">Select All</div>
+      <div class="flex justify-end gap-2">
+        <app-outline-button></app-outline-button>
+        <app-outline-button></app-outline-button>
+        <app-outline-button></app-outline-button>
+        <app-outline-button></app-outline-button>
+      </div>
     </div>
   </div>
 </div>
