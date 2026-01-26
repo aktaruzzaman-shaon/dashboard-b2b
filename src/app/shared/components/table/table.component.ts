@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Booking } from './table.types';
 
 @Component({
@@ -8,24 +8,10 @@ import { Booking } from './table.types';
   styleUrl: './table.component.css',
 })
 export class TableComponent {
-  selectedRowReference: string = '';
+  // selectedRowReference: string = '';
 
-  headers = [
-    'Travel Date',
-    'Reference',
-    'Option Name',
-    'Type',
-    'Start Time',
-    'Duration',
-    'Guests',
-    'Sold',
-    'Confirmation',
-    'Supplier',
-    'Status',
-    'User',
-    'Provider',
-    'Details',
-  ];
+  columns = input<{ key: string; label: string }[]>([]);
+  columnVisibility = input<Record<string, boolean>>({});
 
   bookings: Booking[] = [
     {
@@ -58,90 +44,66 @@ export class TableComponent {
       user: 'Rajesh Verma',
       provider: 'Paramount Tourism',
     },
-    {
-      travelDate: '13 Oct 2024',
-      reference: '26465465498464455',
-      optionName: 'From Dubai Marina Sightseeing Yacht',
-      type: 'Private',
-      startTime: '10:00 AM',
-      duration: '4 Hours',
-      guests: '8Adult 4 Child 2 Infant',
-      sold: { cost: 149, sale: 200 },
-      confirmation: 'YCTG5498641',
-      supplier: 'Karan Verma',
-      status: 'Cancelled',
-      user: 'Rajesh Verma',
-      provider: 'Paramount Tourism',
-    },
-    {
-      travelDate: '13 Oct 2024',
-      reference: '264654654984641fd42342',
-      optionName: 'From Dubai Marina Sightseeing Yacht',
-      type: 'Private',
-      startTime: '10:00 AM',
-      duration: '4 Hours',
-      guests: '8Adult 4 Child 2 Infant',
-      sold: { cost: 149, sale: 200 },
-      confirmation: 'YCTG5498641',
-      supplier: 'Karan Verma',
-      status: 'Accepted',
-      user: 'Rajesh Verma',
-      provider: 'Paramount Tourism',
-    },
-    {
-      travelDate: '13 Oct 2024',
-      reference: '2646546549846413342342',
-      optionName: 'From Dubai Marina Sightseeing Yacht',
-      type: 'Private',
-      startTime: '10:00 AM',
-      duration: '4 Hours',
-      guests: '8Adult 4 Child 2 Infant',
-      sold: { cost: 149, sale: 200 },
-      confirmation: 'YCTG5498641',
-      supplier: 'Karan Verma',
-      status: 'Accepted',
-      user: 'Rajesh Verma',
-      provider: 'Paramount Tourism',
-    },
   ];
 
-  onViewDetails(booking: Booking): void {
-    console.log('View details:', booking);
+  isVisible(key: string): boolean {
+    return this.columnVisibility()[key] !== false;
   }
 
-  onTransfer(booking: Booking): void {
-    console.log('Transfer booking:', booking);
+  visibleColumnCount(): number {
+    return this.columns().filter((col) => this.isVisible(col.key)).length;
   }
 
-  onSearch(booking: Booking): void {
-    console.log('Search booking:', booking);
-  }
-
-  onSortColumn(header: string): void {
-    console.log('Sort by:', header);
-  }
-
-  onReferenceDetails(booking: Booking): void {
-    console.log('Reference details clicked:', booking);
-    // Will open modal later
-  }
-
-  onOptionNameClick(booking: Booking): void {
-    console.log('Option name clicked:', booking);
-    // Will open modal later
-  }
-
-  onSupplierClick(booking: Booking): void {
-    console.log('Supplier clicked:', booking);
-    // Will open modal later
+  onSortColumn(label: string) {
+    console.log('Sort by:', label);
   }
 
   getStatusClass(status: string): string {
-    const classes = {
+    const map = {
       Pending: 'bg-orange-100 text-orange-600',
       Accepted: 'bg-green-100 text-green-600',
       Cancelled: 'bg-red-100 text-red-600',
     };
-    return classes[status as keyof typeof classes] || '';
+    return map[status as keyof typeof map] || '';
   }
+
+  // columns = input<{ name: string; value: string }[]>([]);
+  // columnVisibility = input<Record<string, boolean>>({});
+
+  // onViewDetails(booking: Booking): void {
+  //   console.log('View details:', booking);
+  // }
+
+  // isVisible(key: string): boolean {
+  //   return this.columnVisibility()[key] !== false;
+  // }
+
+  // onTransfer(booking: Booking): void {
+  //   console.log('Transfer booking:', booking);
+  // }
+
+  // onSearch(booking: Booking): void {
+  //   console.log('Search booking:', booking);
+  // }
+
+  // onSortColumn(header: string): void {
+  //   console.log('Sort by:', header);
+  // }
+
+  // onReferenceDetails(booking: Booking): void {
+  //   console.log('Reference details clicked:', booking);
+  //   // Will open modal later
+  // }
+
+  // onOptionNameClick(booking: Booking): void {
+  //   console.log('Option name clicked:', booking);
+  //   // Will open modal later
+  // }
+
+  // onSupplierClick(booking: Booking): void {
+  //   console.log('Supplier clicked:', booking);
+  //   // Will open modal later
+  // }
+
+  // visibleColumnCount = () => this.columns().filter((col) => this.isVisible(col.value)).length;
 }

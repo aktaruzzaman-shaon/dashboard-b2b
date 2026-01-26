@@ -9,6 +9,9 @@ import { SelectMenu } from '../shared/components/select/select-menu/selectMenu.t
 import { ToggleComponentContainer } from '../shared/components/container/toggle-component-container/toggle-component-container';
 import { StatusButton } from '../shared/components/status-button/status-button.component';
 import { StatusButtonData } from '../shared/components/status-button/status-button.types';
+import { ToggleButtonComponent } from '../shared/components/toggle-button/toggle-button.component';
+import { TableComponent } from '../shared/components/table/table.component';
+type ColumnKey = string;
 
 @Component({
   selector: 'app-b2b-dashboard',
@@ -20,6 +23,8 @@ import { StatusButtonData } from '../shared/components/status-button/status-butt
     SelectMenuComponent,
     ToggleComponentContainer,
     StatusButton,
+    ToggleButtonComponent,
+    TableComponent,
   ],
   templateUrl: './b2b-dashboard.html',
   styleUrl: './b2b-dashboard.css',
@@ -131,7 +136,9 @@ export class B2bDashboard {
     this.isContainerOpen.set(false);
   }
 
-  //Table proftion===========================
+  //Table portion===========================
+
+  // for status buttons
   statuses = signal<StatusButtonData[]>([
     { label: 'Pending', count: 30, value: 'pending' },
     { label: 'Approved', count: 12, value: 'approved' },
@@ -147,5 +154,58 @@ export class B2bDashboard {
 
     this.isLoading.set(true);
     setTimeout(() => this.isLoading.set(false), 1000);
+  }
+
+  // table column modification button
+  isTableModificationContainerOpen = signal(false);
+  openTableRowModificationContainer() {
+    this.isTableModificationContainerOpen.set(true);
+  }
+  closeTableRowModificationContainer() {
+    this.isTableModificationContainerOpen.set(false);
+  }
+
+  //Table Column Customization toggle buttons==================
+
+  tableColumns = [
+    { key: 'travelDate', label: 'Travel Date' },
+    { key: 'reference', label: 'Reference' },
+    { key: 'optionName', label: 'Option Name' },
+    { key: 'type', label: 'Type' },
+    { key: 'startTime', label: 'Start Time' },
+    { key: 'duration', label: 'Duration' },
+    { key: 'guests', label: 'Guests' },
+    { key: 'sold', label: 'Sold' },
+    { key: 'confirmation', label: 'Confirmation' },
+    { key: 'supplier', label: 'Supplier' },
+    { key: 'status', label: 'Status' },
+    { key: 'user', label: 'User' },
+    { key: 'provider', label: 'Provider' },
+    { key: 'actions', label: 'Details' },
+  ];
+
+  // 🔹 visibility state per column
+  columnVisibility = signal<Record<ColumnKey, boolean>>(
+    Object.fromEntries(this.tableColumns.map((col) => [col.key, true])),
+  );
+
+  // 🔹 called from toggle component
+  onFilterUpdate(columnKey: ColumnKey, isActive: boolean) {
+    this.columnVisibility.update((state) => ({
+      ...state,
+      [columnKey]: isActive,
+    }));
+  }
+
+  // 🔹 reset button logic
+  resetColumns() {
+    this.columnVisibility.set(
+      Object.fromEntries(this.tableColumns.map((col) => [col.key, true])),
+    );
+  }
+
+  // for only table porttion
+  openColumnSettings() {
+    this.isTableModificationContainerOpen.set(true);
   }
 }

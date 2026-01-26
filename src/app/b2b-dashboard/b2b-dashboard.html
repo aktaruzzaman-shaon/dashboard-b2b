@@ -59,8 +59,10 @@
     </app-toggle-component-container>
   </div>
 
+  <!-- =============== Table Portions  ======================== -->
   <div class="app-container">
     <div class="flex justify-around">
+      <!-- table status button -->
       <div class="flex gap-3">
         @for (status of statuses(); track status.value) {
           <app-status-button
@@ -76,8 +78,26 @@
         }
       </div>
       <div>
-        <div (click)="open()">Open</div>
+        <div (click)="openTableRowModificationContainer()">Open</div>
       </div>
+    </div>
+    <!-- table row modification toggle buttons -->
+    <div class="mt-5">
+      <app-toggle-component-container
+        [isOpen]="isTableModificationContainerOpen()"
+        (closed)="closeTableRowModificationContainer()"
+      >
+        @for (singleColumn of tableColumns; track singleColumn.key) {
+          <app-toggle-button
+            [label]="singleColumn.label"
+            [(checked)]="columnVisibility()[singleColumn.key]"
+            (filterChanged)="onFilterUpdate(singleColumn.key, $event)"
+          ></app-toggle-button>
+        }
+      </app-toggle-component-container>
+    </div>
+    <div>
+      <app-table [columns]="tableColumns" [columnVisibility]="columnVisibility()"></app-table>
     </div>
   </div>
 </div>

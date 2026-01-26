@@ -1,377 +1,118 @@
-<!-- <div class="app-container">
-  <div class="w-full bg-white shadow">
-    <table class="w-full min-w-max block">
-      <thead class="block w-full mb-2 bg-gray-50 border-b border-gray-200">
-        <tr class="grid grid-cols-14 items-center ">
-          @for (header of headers; track header) {
-            <th
-              class=" py-3 px-5 text-center text-xs font-medium text-gray-600 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors"
-              (click)="header !== 'Details' && onSortColumn(header)"
-            >
-              <div class="flex items-center gap-1">
-                {{ header }}
-                @if (header !== 'Details') {
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="15"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="text-gray-500 transition-colors duration-200 group-hover:text-blue-600"
-                  >
-                    <path d="m7 15 5 5 5-5" />
-                    <path d="m7 9 5-5 5 5" />
-                  </svg>
-                }
-              </div>
-            </th>
-          }
-        </tr>
-      </thead>
-      <tbody class="">
-        @if (bookings.length > 0) {
-          @for (booking of bookings; track booking.reference) {
-            <tr
-              class="grid grid-cols-14 items-left mb-1 bg-white border border-gray-300 rounded-xl hover:shadow-md transition-all px-4"
-              [class.border-sky-400]="selectedRowReference === booking.reference"
-              (click)="
-                selectedRowReference =
-                  selectedRowReference === booking.reference ? '' : booking.reference
-              "
-            >
-              <td class="pt-2.5 px-5 text-sm text-gray-900 whitespace-nowrap">
-                {{ booking.travelDate }}
-              </td>
-
-              <td class="pt-2.5 text-sm text-gray-900 whitespace-nowrap">
-                <div class="flex items-center gap-2">
-                  <span>{{ booking.reference }}</span>
-                  <button
-                    (click)="onReferenceDetails(booking)"
-                    class="px-2 py-1 text-xs bg-blue-50 rounded-md hover:bg-blue-100 rounded transition-colors border border-blue-200"
-                    aria-label="View reference details"
-                  >
-                    Details
-                  </button>
-                </div>
-              </td>
-
-              <td class="pt-2.5 text-sm hover:underline cursor-pointer whitespace-nowrap">
-                {{ booking.optionName }}
-              </td>
-
-              <td class="pt-2.5 px-5 text-sm text-gray-900 whitespace-nowrap">
-                {{ booking.type }}
-              </td>
-
-              <td class="pt-2.5 text-sm text-gray-900 whitespace-nowrap">
-                {{ booking.startTime }}
-              </td>
-
-              <td class="pt-2.5 text-sm text-gray-900 whitespace-nowrap">
-                {{ booking.duration }}
-              </td>
-
-              <td class="pt-2.5 text-sm text-gray-900 whitespace-nowrap">
-                {{ booking.guests }}
-              </td>
-
-              <td class="pt-2.5 text-sm text-gray-900 whitespace-nowrap">
-                <div>C: {{ booking.sold.cost }}</div>
-                <div>S: {{ booking.sold.sale }}</div>
-              </td>
-
-              <td class="pt-2.5 text-sm text-gray-900 whitespace-nowrap">
-                {{ booking.confirmation }}
-              </td>
-
-              <td class="pt-2.5 whitespace-nowrap">
-                <div
-                  (click)="onSupplierClick(booking)"
-                  class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 -mx-2 -my-1 transition-colors"
-                >
-                  <div
-                    class="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center shrink-0"
-                  >
-                    <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <span class="text-sm text-gray-900">{{ booking.supplier }}</span>
-                  <svg
-                    class="w-4 h-4 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </div>
-              </td>
-              <td class="pt-2.5 whitespace-nowrap">
-                <span
-                  [class]="
-                    getStatusClass(booking.status) + ' px-3 py-1 rounded-full text-xs font-medium'
-                  "
-                >
-                  {{ booking.status }}
-                </span>
-              </td>
-
-              <td class="pt-2.5 text-sm text-gray-900 whitespace-nowrap">
-                {{ booking.user }}
-              </td>
-
-              <td class="pt-2.5 text-sm text-gray-900 whitespace-nowrap">
-                {{ booking.provider }}
-              </td>
-
-              <td class="pt-2.5 whitespace-nowrap">
-                <div class="flex items-center gap-2">
-                  <button
-                    (click)="onViewDetails(booking)"
-                    class="p-1 hover:bg-gray-100 rounded transition-colors"
-                    aria-label="View details"
-                  >
-                    <svg
-                      class="w-5 h-5 text-blue-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    (click)="onTransfer(booking)"
-                    class="p-1 hover:bg-gray-100 rounded transition-colors"
-                    aria-label="Transfer booking"
-                  >
-                    <svg
-                      class="w-5 h-5 text-blue-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    (click)="onSearch(booking)"
-                    class="p-1 hover:bg-gray-100 rounded transition-colors"
-                    aria-label="Search booking"
-                  >
-                    <svg
-                      class="w-5 h-5 text-blue-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        } @else {
-          <tr>
-            <td [attr.colspan]="headers.length" class="px-4 py-8 text-center text-gray-500">
-              <div class="flex flex-col items-center gap-2">
-                <svg
-                  class="w-12 h-12 text-gray-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                  />
-                </svg>
-                <p class="text-lg font-medium">No bookings found</p>
-                <p class="text-sm">There are no bookings to display at the moment.</p>
-              </div>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-</div> -->
-
-<div class="w-full p-6 bg-gray-50">
-  <!-- table head -->
-  <div class="min-w-[1400px]">
+<!-- TABLE WRAPPER -->
+<div class="w-full overflow-x-auto">
+  <!-- TABLE CONTAINER -->
+  <div class="w-max">
+    <!-- TABLE HEADER -->
     <div
-      class="grid grid-cols-14 gap-2 px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+      class="grid gap-1 px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+      [style.gridTemplateColumns]="'repeat(' + visibleColumnCount() + ', 100px)'"
     >
-      @for (header of headers; track header) {
-        <div
-          class="flex items-center gap-1 cursor-pointer hover:text-gray-800 transition-colors"
-          (click)="onSortColumn(header)"
-        >
-          {{ header }}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="text-gray-400"
+      @for (col of columns(); track col.key) {
+        @if (isVisible(col.key)) {
+          <div
+            class="flex items-center gap-1 cursor-pointer hover:text-gray-800 transition-colors"
+            (click)="onSortColumn(col.label)"
           >
-            <path d="m7 15 5 5 5-5" />
-            <path d="m7 9 5-5 5 5" />
-          </svg>
-        </div>
+            {{ col.label }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-gray-400"
+            >
+              <path d="m7 15 5 5 5-5" />
+              <path d="m7 9 5-5 5 5" />
+            </svg>
+          </div>
+        }
       }
     </div>
 
-    <!-- table body -->
+    <!-- TABLE BODY -->
     <div class="space-y-4 mt-2">
       @for (booking of bookings; track booking.reference) {
         <div
-          class="grid grid-cols-14 gap-2 items-center px-6 py-2 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-sky-300 transition-all cursor-default"
-          [class.border-sky-400]="selectedRowReference === booking.reference"
-          (click)="
-            selectedRowReference =
-              selectedRowReference === booking.reference ? '' : booking.reference
-          "
+          class="grid gap-1 items-center px-6 py-2 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-sky-300 transition-all cursor-default"
+          [style.gridTemplateColumns]="'repeat(' + visibleColumnCount() + ', 100px)'"
         >
-          <div class="text-sm text-gray-900">{{ booking.travelDate }}</div>
+          @for (col of columns(); track col.key) {
+            @if (isVisible(col.key)) {
+              @switch (col.key) {
+                @case ('travelDate') {
+                  <div class="text-sm">{{ booking.travelDate }}</div>
+                }
 
-          <div class="flex items-center gap-2 text-sm text-gray-900">
-            <span class="truncate">{{ booking.reference }}</span>
-            <button
-              (click)="onReferenceDetails(booking)"
-              class="px-2 py-0.5 text-[10px] bg-gray-50 text-gray-600 rounded border border-gray-200 hover:bg-gray-100 transition-colors"
-            >
-              Details
-            </button>
-          </div>
+                @case ('reference') {
+                  <div class="text-sm truncate">{{ booking.reference }}</div>
+                }
 
-          <div class="text-sm text-gray-900 truncate font-medium">{{ booking.optionName }}</div>
+                @case ('optionName') {
+                  <div class="text-sm font-medium truncate">{{ booking.optionName }}</div>
+                }
 
-          <div class="text-sm text-gray-600">{{ booking.type }}</div>
-          <div class="text-sm text-gray-900">{{ booking.startTime }}</div>
-          <div class="text-sm text-gray-600">{{ booking.duration }}</div>
-          <div class="text-sm text-gray-900">{{ booking.guests }}</div>
+                @case ('type') {
+                  <div class="text-sm">{{ booking.type }}</div>
+                }
 
-          <div class="text-xs text-gray-600">
-            <div class="font-medium">C: {{ booking.sold.cost }}</div>
-            <div class="font-medium">S: {{ booking.sold.sale }}</div>
-          </div>
+                @case ('startTime') {
+                  <div class="text-sm">{{ booking.startTime }}</div>
+                }
 
-          <div class="text-sm text-gray-900 font-mono">{{ booking.confirmation }}</div>
+                @case ('duration') {
+                  <div class="text-sm">{{ booking.duration }}</div>
+                }
 
-          <div class="text-sm text-gray-700 truncate">{{ booking.supplier }}</div>
-          <div class="text-sm text-gray-900">{{ booking.user }}</div>
-          <div class="text-sm text-gray-900">{{ booking.provider }}</div>
+                @case ('guests') {
+                  <div class="text-sm">{{ booking.guests }}</div>
+                }
 
-          <div>
-            <span
-              [class]="
-                getStatusClass(booking.status) +
-                ' px-2 py-1 rounded-full text-[10px] font-bold uppercase'
-              "
-            >
-              {{ booking.status }}
-            </span>
-          </div>
+                @case ('sold') {
+                  <div class="text-xs">
+                    <div>C: {{ booking.sold.cost }}</div>
+                    <div>S: {{ booking.sold.sale }}</div>
+                  </div>
+                }
 
-          <div class="flex justify-end gap-2">
-            <button class="p-1 hover:bg-blue-50 rounded text-blue-500 transition-colors">
-              <svg
-                class="w-5 h-5 text-blue-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                />
-              </svg>
-            </button>
-            <button class="p-1 hover:bg-blue-50 rounded text-blue-500 transition-colors">
-              <svg
-                class="w-5 h-5 text-blue-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-            </button>
-            <button class="p-1 hover:bg-blue-50 rounded text-blue-500 transition-colors">
-              <svg
-                class="w-5 h-5 text-blue-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </button>
-          </div>
+                @case ('confirmation') {
+                  <div class="text-sm">{{ booking.confirmation }}</div>
+                }
+
+                @case ('supplier') {
+                  <div class="text-sm">{{ booking.supplier }}</div>
+                }
+
+                @case ('status') {
+                  <span
+                    class="px-2 py-1 rounded-full text-[10px] font-bold uppercase"
+                    [class]="getStatusClass(booking.status)"
+                  >
+                    {{ booking.status }}
+                  </span>
+                }
+
+                @case ('user') {
+                  <div class="text-sm">{{ booking.user }}</div>
+                }
+
+                @case ('provider') {
+                  <div class="text-sm">{{ booking.provider }}</div>
+                }
+
+                @case ('actions') {
+                  <div class="flex justify-end gap-2">
+                    <button class="text-blue-500 text-xs">View</button>
+                    <button class="text-blue-500 text-xs">Transfer</button>
+                  </div>
+                }
+              }
+            }
+          }
         </div>
       }
     </div>
