@@ -21,7 +21,7 @@ export class StatusButton {
 
   buttonClasses = computed(() => {
     const base =
-      'relative inline-flex items-center gap-2 p-5 rounded-md border transition font-medium bold';
+      'relative inline-flex items-center gap-2 border rounded-xl transition font-medium bold';
 
     const sizeMap: Record<StatusSize, string> = {
       sm: 'px-3 py-1.5 text-xs',

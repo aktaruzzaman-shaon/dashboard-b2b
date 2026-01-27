@@ -13,7 +13,10 @@ import { ToggleButtonComponent } from '../shared/components/toggle-button/toggle
 import { TableComponent } from '../shared/components/table/table.component';
 import { SettingsButton } from '../shared/components/button/settings-button/settings-button';
 import { OutlineButton } from '../shared/components/outline-button/outline-button';
-import { MultiSelect, MultiSelectOption } from '../shared/components/select/multi-select/multi-select.component';
+import {
+  MultiSelect,
+  MultiSelectOption,
+} from '../shared/components/select/multi-select/multi-select.component';
 import { OptionItem } from '../shared/components/select/select.types';
 type ColumnKey = string;
 
@@ -136,10 +139,13 @@ export class B2bDashboard {
 
   // =========Advance Search Portion==========
   isContainerOpen = signal(false);
+  advanceButtonOpen = signal(true);
   open() {
+    this.advanceButtonOpen.set(false);
     this.isContainerOpen.set(true);
   }
   close() {
+    this.advanceButtonOpen.set(true);
     this.isContainerOpen.set(false);
   }
 
@@ -220,12 +226,10 @@ export class B2bDashboard {
   }
 
   // table column modification button
+
   isTableModificationContainerOpen = signal(false);
-  openTableRowModificationContainer() {
-    this.isTableModificationContainerOpen.set(true);
-  }
-  closeTableRowModificationContainer() {
-    this.isTableModificationContainerOpen.set(false);
+  openTableRowModificationContainerToggle(isOpen: boolean) {
+    this.isTableModificationContainerOpen.set(isOpen);
   }
 
   //Table Column Customization toggle buttons==================

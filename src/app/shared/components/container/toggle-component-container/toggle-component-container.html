@@ -1,28 +1,33 @@
 @if (isOpen()) {
   <div
-    class="relative flex flex-wrap gap-2 max-w-full rounded-2xl bg-white p-6 border border-gray-300"
+    class="relative flex flex-col gap-4 max-w-full rounded-2xl bg-white p-6 border border-gray-300"
+    [style.z-index]="zIndex()"
   >
-    <!-- Close Button -->
-    <button
-      type="button"
-      aria-label="Close"
-      (click)="close()"
-      class="absolute right-0 top-0 rounded-md p-1 text-black-500 cursor-pointer"
-    >
-      <!-- Cross SVG -->
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
+    <div class="flex items-center text-sm font-semibold text-gray-700">
+      {{ name() }}
+    </div>
+    @if (closeButton()) {
+      <button
+        type="button"
+        aria-label="Close"
+        (click)="close()"
+        class="absolute right-3 top-3 rounded-md p-1 text-gray-500 hover:bg-gray-100 cursor-pointer transition-colors"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    }
 
-    <!-- Content Projection -->
-    <ng-content></ng-content>
+    <div class="flex flex-wrap gap-2 items-center">
+      <ng-content></ng-content>
+    </div>
   </div>
 }

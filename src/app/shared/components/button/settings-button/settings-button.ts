@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-settings-button',
@@ -7,19 +7,26 @@ import { Component, input, output } from '@angular/core';
   styleUrl: './settings-button.css',
 })
 export class SettingsButton {
-  // Inputs using signals
-  label = input<string>('Column Selection');
-  buttonLabel = input<string>('Default');
+  label = input.required<string>();
+  buttonLabel = input.required<string>();
 
-  // Outputs (Events)
   onButtonClick = output<void>();
-  onIconClick = output<void>();
+  onIconClick = output<boolean>();
+
+  isModalOpen = signal(false);
 
   handleButtonClick() {
     this.onButtonClick.emit();
   }
 
-  handleIconClick() {
-    this.onIconClick.emit();
+  toggleModal() {
+    this.isModalOpen.update((value) => !value);
+    this.onIconClick.emit(this.isModalOpen());
+  }
+
+  // Method to close modal from outside if needed
+  closeModal() {
+    this.isModalOpen.set(false);
+    this.onIconClick.emit(false);
   }
 }

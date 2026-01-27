@@ -49,9 +49,15 @@
     <app-input-core label="Booking Reference Number"></app-input-core>
 
     <!-- ========== Advanced Search Portion =========== -->
-    <button (click)="open()" class="pb-3 text-lg text-">Advance Access</button>
+    @if (advanceButtonOpen()) {
+      <button (click)="open()" class="pb-3 text-md text-blue-600 text-">Advance Access</button>
+    }
 
-    <app-toggle-component-container [isOpen]="isContainerOpen()" (closed)="close()">
+    <app-toggle-component-container
+      [isOpen]="isContainerOpen()"
+      (closed)="close()"
+      name="Advance Accress"
+    >
       <div>
         <app-multi-select
           id="fruits"
@@ -118,7 +124,7 @@
           label="Column Selection"
           buttonLabel="Default"
           (onButtonClick)="resetToDefault()"
-          (onIconClick)="openTableRowModificationContainer()"
+          (onIconClick)="openTableRowModificationContainerToggle($event)"
         >
           ></app-settings-button
         >
@@ -128,7 +134,7 @@
     <div class="mt-5">
       <app-toggle-component-container
         [isOpen]="isTableModificationContainerOpen()"
-        (closed)="closeTableRowModificationContainer()"
+        [closeButton]="false"
       >
         <div class="grid md:grid-cols-5 sm:grid-cols-2 sm:gap-x-20 md:gap-x-1.5 md:gap-y-1.5">
           @for (singleColumn of tableColumns; track singleColumn.key) {
