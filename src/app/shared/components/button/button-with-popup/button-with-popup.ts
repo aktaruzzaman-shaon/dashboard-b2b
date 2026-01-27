@@ -1,0 +1,18 @@
+import { Component, input, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-button-with-popup',
+  imports: [],
+  templateUrl: './button-with-popup.html',
+  styleUrl: './button-with-popup.css',
+})
+export class ButtonWithPopup {
+  label = input<string>('Open Menu');
+  isOpen = signal(false);
+  toggle() {
+    this.isOpen.update((v) => !v);
+  }
+  close() {
+    this.isOpen.set(false);
+  }
+}

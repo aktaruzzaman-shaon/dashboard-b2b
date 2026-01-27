@@ -17,10 +17,10 @@ export class OutlineButton {
   customClass = input<string>('');
 
   // Click Event
-  btnClick = output<void>();
+  btnClick = output<boolean>();
   handleClick() {
     if (!this.disabled() && !this.isLoading()) {
-      this.btnClick.emit();
+      this.btnClick.emit(true);
     }
   }
 }

@@ -18,6 +18,9 @@ import {
   MultiSelectOption,
 } from '../shared/components/select/multi-select/multi-select.component';
 import { OptionItem } from '../shared/components/select/select.types';
+import { single } from 'rxjs';
+import { ModalComponent } from "../shared/components/modal/modal.component";
+import { ButtonWithPopup } from "../shared/components/button/button-with-popup/button-with-popup";
 type ColumnKey = string;
 
 @Component({
@@ -35,7 +38,9 @@ type ColumnKey = string;
     SettingsButton,
     OutlineButton,
     MultiSelect,
-  ],
+    ModalComponent,
+    ButtonWithPopup
+],
   templateUrl: './b2b-dashboard.html',
   styleUrl: './b2b-dashboard.css',
 })
@@ -277,4 +282,11 @@ export class B2bDashboard {
   resetToDefault() {
     this.columnVisibility.set(Object.fromEntries(this.tableColumns.map((col) => [col.key, true])));
   }
+
+  //reminder button
+  reminderModalOpen = signal<boolean>(false)
+  sendReminder(value:boolean){
+    this.reminderModalOpen.set(value)
+  }
+
 }
