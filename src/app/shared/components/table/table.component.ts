@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Booking } from './table.types';
 
 @Component({
@@ -8,10 +8,14 @@ import { Booking } from './table.types';
   styleUrl: './table.component.css',
 })
 export class TableComponent {
-  // selectedRowReference: string = '';
-
-  columns = input<{ key: string; label: string }[]>([]);
+   columns = input<{ key: string; label: string }[]>([]);
   columnVisibility = input<Record<string, boolean>>({});
+
+  // Track selected rows
+  selectedReferences = new Set<string>();
+
+  // Output event to notify parent about selection changes
+  selectionChange = output<string[]>();
 
   bookings: Booking[] = [
     {
@@ -67,43 +71,60 @@ export class TableComponent {
     return map[status as keyof typeof map] || '';
   }
 
-  // columns = input<{ name: string; value: string }[]>([]);
-  // columnVisibility = input<Record<string, boolean>>({});
-
-  // onViewDetails(booking: Booking): void {
-  //   console.log('View details:', booking);
-  // }
-
-  // isVisible(key: string): boolean {
-  //   return this.columnVisibility()[key] !== false;
-  // }
-
-  // onTransfer(booking: Booking): void {
-  //   console.log('Transfer booking:', booking);
-  // }
-
-  // onSearch(booking: Booking): void {
-  //   console.log('Search booking:', booking);
-  // }
-
-  // onSortColumn(header: string): void {
-  //   console.log('Sort by:', header);
-  // }
-
   onReferenceDetails(booking: Booking): void {
     console.log('Reference details clicked:', booking);
     // Will open modal later
   }
 
-  // onOptionNameClick(booking: Booking): void {
-  //   console.log('Option name clicked:', booking);
-  //   // Will open modal later
-  // }
+  // Row selection methods
+  isRowSelected(reference: string): boolean {
+    return this.selectedReferences.has(reference);
+  }
 
-  // onSupplierClick(booking: Booking): void {
-  //   console.log('Supplier clicked:', booking);
-  //   // Will open modal later
-  // }
+  toggleRowSelection(booking: Booking, event: Event): void {
+    // Prevent triggering row selection when clicking buttons
+    if ((event.target as HTMLElement).closest('button')) {
+      return;
+    }
 
-  // visibleColumnCount = () => this.columns().filter((col) => this.isVisible(col.value)).length;
+    if (this.selectedReferences.has(booking.reference)) {
+      this.selectedReferences.delete(booking.reference);
+    } else {
+      this.selectedReferences.add(booking.reference);
+    }
+
+    this.emitSelectionChange();
+  }
+
+  selectAll(): void {
+    this.bookings.forEach((booking) => {
+      this.selectedReferences.add(booking.reference);
+    });
+    this.emitSelectionChange();
+  }
+
+  deselectAll(): void {
+    this.selectedReferences.clear();
+    this.emitSelectionChange();
+  }
+
+  toggleSelectAll(): void {
+    if (this.isAllSelected()) {
+      this.deselectAll();
+    } else {
+      this.selectAll();
+    }
+  }
+
+  isAllSelected(): boolean {
+    return this.bookings.length > 0 && this.selectedReferences.size === this.bookings.length;
+  }
+
+  getSelectedCount(): number {
+    return this.selectedReferences.size;
+  }
+
+  private emitSelectionChange(): void {
+    this.selectionChange.emit(Array.from(this.selectedReferences));
+  }
 }

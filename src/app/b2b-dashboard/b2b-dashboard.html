@@ -148,101 +148,130 @@
       </app-toggle-component-container>
     </div>
     <div>
-      <app-table [columns]="tableColumns" [columnVisibility]="columnVisibility()"></app-table>
+      <!-- <app-table [columns]="tableColumns" [columnVisibility]="columnVisibility()"></app-table> -->
+      <app-table
+        #table
+        [columns]="tableColumns"
+        [columnVisibility]="columnVisibility()"
+        (selectionChange)="onSelectionChange($event)"
+      />
     </div>
     <!-- ================= Table Final Updating Portion=============== -->
 
     <div class="mt-5">
-      <div class="">Select All</div>
-      <div class="flex justify-end gap-2">
-        <app-button-with-popup label="Show Reminders">
-          <div class="flex flex-col divide-y divide-gray-100">
+      <div class="flex justify-between">
+        <div>
+          <div class="mb-4 flex flex-col gap-3 items-center">
+            <span class="text-sm text-gray-600">
+              Selected: {{ table.getSelectedCount() }} 
+            </span>
             <button
-              class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
+              (click)="table.toggleSelectAll()"
+              class=" text-md text-blue-500 rounded transition-colors"
             >
-              <div class="flex items-center gap-3">
-                <i class="text-xl text-gray-700">💬</i>
-                <span class="font-medium text-gray-800">WhatsApp Reminder</span>
-              </div>
-              <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              {{ table.isAllSelected() ? 'Deselect All' : 'Select All' }}
             </button>
-            <button
-              class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
-            >
-              <div class="flex items-center gap-3">
-                <i class="text-xl text-gray-700">🖨️</i>
-                <span class="font-medium text-gray-800">Print Job</span>
-              </div>
-              <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
-            </button>
+
+            <!-- <button
+          (click)="table.deselectAll()"
+          class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+          [disabled]="table.getSelectedCount() === 0"
+        >
+          Clear Selection
+        </button> -->
           </div>
-        </app-button-with-popup>
-        <app-button-with-popup label="Update Supplier">
-          <div class="flex flex-col divide-y divide-gray-100">
-            <button
-              class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
-            >
-              <div class="flex items-center gap-3">
-                <i class="text-xl text-gray-700">💬</i>
-                <span class="font-medium text-gray-800">WhatsApp Reminder</span>
-              </div>
-              <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
-            </button>
-            <button
-              class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
-            >
-              <div class="flex items-center gap-3">
-                <i class="text-xl text-gray-700">🖨️</i>
-                <span class="font-medium text-gray-800">Print Job</span>
-              </div>
-              <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
-            </button>
-          </div>
-        </app-button-with-popup>
-        <app-button-with-popup label="Accept">
-          <div class="flex flex-col divide-y divide-gray-100">
-            <button
-              class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
-            >
-              <div class="flex items-center gap-3">
-                <i class="text-xl text-gray-700">💬</i>
-                <span class="font-medium text-gray-800">WhatsApp Reminder</span>
-              </div>
-              <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
-            </button>
-            <button
-              class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
-            >
-              <div class="flex items-center gap-3">
-                <i class="text-xl text-gray-700">🖨️</i>
-                <span class="font-medium text-gray-800">Print Job</span>
-              </div>
-              <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
-            </button>
-          </div>
-        </app-button-with-popup>
-        <app-button-with-popup label="Bookings">
-          <div class="flex flex-col divide-y divide-gray-100">
-            <button
-              class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
-            >
-              <div class="flex items-center gap-3">
-                <i class="text-xl text-gray-700">💬</i>
-                <span class="font-medium text-gray-800">WhatsApp Reminder</span>
-              </div>
-              <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
-            </button>
-            <button
-              class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
-            >
-              <div class="flex items-center gap-3">
-                <i class="text-xl text-gray-700">🖨️</i>
-                <span class="font-medium text-gray-800">Print Job</span>
-              </div>
-              <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
-            </button>
-          </div>
-        </app-button-with-popup>
+        </div>
+
+        <div class="flex gap-2">
+          <app-button-with-popup label="Show Reminders">
+            <div class="flex flex-col mx-5">
+              <button
+                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="text-xl text-gray-700">💬</i>
+                  <span class="font-medium text-gray-800">WhatsApp Reminder</span>
+                </div>
+                <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              </button>
+              <button
+                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="text-xl text-gray-700">🖨️</i>
+                  <span class="font-medium text-gray-800">Print Job</span>
+                </div>
+                <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              </button>
+            </div>
+          </app-button-with-popup>
+          <app-button-with-popup label="Update Supplier">
+            <div class="flex flex-col divide-y divide-gray-100">
+              <button
+                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="text-xl text-gray-700">💬</i>
+                  <span class="font-medium text-gray-800">WhatsApp Reminder</span>
+                </div>
+                <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              </button>
+              <button
+                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="text-xl text-gray-700">🖨️</i>
+                  <span class="font-medium text-gray-800">Print Job</span>
+                </div>
+                <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              </button>
+            </div>
+          </app-button-with-popup>
+          <app-button-with-popup label="Accept">
+            <div class="flex flex-col divide-y divide-gray-100">
+              <button
+                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="text-xl text-gray-700">💬</i>
+                  <span class="font-medium text-gray-800">WhatsApp Reminder</span>
+                </div>
+                <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              </button>
+              <button
+                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="text-xl text-gray-700">🖨️</i>
+                  <span class="font-medium text-gray-800">Print Job</span>
+                </div>
+                <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              </button>
+            </div>
+          </app-button-with-popup>
+          <app-button-with-popup label="Bookings">
+            <div class="flex flex-col divide-y divide-gray-100">
+              <button
+                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="text-xl text-gray-700">💬</i>
+                  <span class="font-medium text-gray-800">WhatsApp Reminder</span>
+                </div>
+                <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              </button>
+              <button
+                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="text-xl text-gray-700">🖨️</i>
+                  <span class="font-medium text-gray-800">Print Job</span>
+                </div>
+                <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
+              </button>
+            </div>
+          </app-button-with-popup>
+        </div>
       </div>
     </div>
   </div>

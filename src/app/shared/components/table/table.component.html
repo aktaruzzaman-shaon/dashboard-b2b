@@ -38,8 +38,12 @@
     <div class="space-y-4 mt-2">
       @for (booking of bookings; track booking.reference) {
         <div
-          class="grid gap-1 items-center px-6 py-2 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-sky-300 transition-all cursor-default"
+          class="grid gap-1 items-center px-6 py-2 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-all cursor-pointer"
+          [class.border-sky-500]="isRowSelected(booking.reference)"
+          [class.bg-sky-50]="isRowSelected(booking.reference)"
+          [class.hover:border-sky-300]="!isRowSelected(booking.reference)"
           [style.gridTemplateColumns]="'repeat(' + visibleColumnCount() + ', 120px)'"
+          (click)="toggleRowSelection(booking, $event)"
         >
           @for (col of columns(); track col.key) {
             @if (isVisible(col.key)) {
@@ -61,7 +65,7 @@
                 }
 
                 @case ('optionName') {
-                  <div class="text-sm  truncate">{{ booking.optionName }}</div>
+                  <div class="text-sm truncate">{{ booking.optionName }}</div>
                 }
 
                 @case ('type') {
@@ -116,7 +120,7 @@
 
                 @case ('actions') {
                   <div class="flex justify-start gap-2 pl-2">
-                    <button class=" hover:bg-blue-50 rounded text-blue-500 transition-colors">
+                    <button class="hover:bg-blue-50 rounded text-blue-500 transition-colors">
                       <svg
                         class="w-5 h-5 text-blue-500"
                         fill="none"
@@ -137,7 +141,7 @@
                         />
                       </svg>
                     </button>
-                    <button class=" hover:bg-blue-50 rounded text-blue-500 transition-colors">
+                    <button class="hover:bg-blue-50 rounded text-blue-500 transition-colors">
                       <svg
                         class="w-5 h-5 text-blue-500"
                         fill="none"
@@ -152,7 +156,7 @@
                         />
                       </svg>
                     </button>
-                    <button class=" hover:bg-blue-50 rounded text-blue-500 transition-colors">
+                    <button class="hover:bg-blue-50 rounded text-blue-500 transition-colors">
                       <svg
                         class="w-5 h-5 text-blue-500"
                         fill="none"
