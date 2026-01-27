@@ -1,10 +1,11 @@
 import { Component, input, output, signal } from '@angular/core';
 import { Booking } from './table.types';
 import { ModalComponent } from '../modal/modal.component';
+import { SignButtonWithPopup } from "../button/sign-button-with-popup/sign-button-with-popup";
 
 @Component({
   selector: 'app-table',
-  imports: [ModalComponent],
+  imports: [ModalComponent, SignButtonWithPopup],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
@@ -70,11 +71,11 @@ export class TableComponent {
   }
 
   onReferenceDetails(booking: Booking): void {
-    this.referenceDetailsModalOpen.set(true);
     console.log('Reference details clicked:', booking);
     // Will open modal later
   }
 
+  //for reference row Details modal operation
   isModalOpen = signal(false);
   isSubmitting = signal(false);
 
@@ -89,15 +90,42 @@ export class TableComponent {
   }
 
   submitModal(): void {
-    console.log("submitted")
+    console.log('submitted');
     this.isSubmitting.set(true);
 
-    // Simulate API call
+    //for loading data
     setTimeout(() => {
       console.log('Submitted Remarks:', this.remarks());
 
       this.isSubmitting.set(false);
       this.isModalOpen.set(false);
+    }, 1500);
+  }
+
+  //for table column supplier details modal operation
+  isSupplierModalOpen = signal(false);
+  isSupplierModalSubmitting = signal(false);
+  supplierRemarks = signal<string>('Supplier');
+
+  openSupplierDetailsModal(): void {
+    console.log("checked")
+    this.isSupplierModalOpen.set(true);
+  }
+
+  closeSupplierDetailsModal(): void {
+    this.isSupplierModalOpen.set(false);
+  }
+
+  submitSupplierModalDetails(): void {
+    console.log('submitted');
+    this.isSubmitting.set(true);
+
+    //for loading data
+    setTimeout(() => {
+      console.log('Submitted Remarks:', this.remarks());
+
+      this.isSupplierModalSubmitting.set(false);
+      this.isSupplierModalOpen.set(false);
     }, 1500);
   }
 

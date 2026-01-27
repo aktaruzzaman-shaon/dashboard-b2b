@@ -40,6 +40,7 @@ type ColumnKey = string;
     MultiSelect,
     ButtonWithPopup,
     DateSlider,
+    ModalComponent,
   ],
   templateUrl: './b2b-dashboard.html',
   styleUrl: './b2b-dashboard.css',
@@ -283,6 +284,32 @@ export class B2bDashboard {
 
   resetToDefault() {
     this.columnVisibility.set(Object.fromEntries(this.tableColumns.map((col) => [col.key, true])));
+  }
+
+  //for table supplier modal operation
+  isModalOpen = signal(false);
+  isSubmitting = signal(false);
+
+  remarks = signal<string>('');
+
+  openModal(): void {
+    this.isModalOpen.set(true);
+  }
+
+  closeModal(): void {
+    this.isModalOpen.set(false);
+  }
+
+  submitModal(): void {
+    this.isSubmitting.set(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      console.log('Submitted Remarks:', this.remarks());
+
+      this.isSubmitting.set(false);
+      this.isModalOpen.set(false);
+    }, 1500);
   }
 
   //reminder button
