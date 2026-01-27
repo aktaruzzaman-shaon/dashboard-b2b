@@ -1,15 +1,33 @@
-<!-- Overlay -->
-
-<div class="relative min-w-80 w-full max-w-sm z-50">
-  <label class="block text-sm font-medium text-gray-700 mb-2">{{ label() }}</label>
-  <!-- Input -->
-  <button
+<!-- Full Screen Overlay - appears behind dropdown but above other content -->
+@if (isOpen()) {
+  <div 
+    class="fixed inset-0  bg-black/20"
+    [style.z-index]="zIndex() - 1"
     (click)="toggleDropdown()"
-    class="w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 shadow-sm"
+  ></div>
+}
+
+<div class="relative min-w-80 w-full max-w-sm" [style.z-index]="zIndex()">
+  <!-- Label -->
+  @if (label()) {
+    <label class="block text-sm font-medium text-gray-700 mb-2">
+      {{ label() }}
+      <!-- @if (getSelectedCount() > 0) {
+        <span class="text-blue-600 text-xs ml-1">({{ getSelectedCount() }} selected)</span>
+      } -->
+    </label>
+  }
+
+  <!-- Trigger Button -->
+  <button
+    type="button"
+    (click)="toggleDropdown()"
+    class="w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all relative"
+    [class.border-blue-500]="isOpen()"
   >
-    <span class="truncate text-left">{{ selectedLabel() }}</span>
+    <span class="truncate text-left flex-1">{{ selectedLabel() }}</span>
     <svg
-      class="h-4 w-4 text-gray-500 transition-transform duration-200"
+      class="h-4 w-4 text-gray-500 transition-transform duration-200 flex-shrink-0 ml-2"
       [class.rotate-180]="isOpen()"
       fill="none"
       viewBox="0 0 24 24"
@@ -19,17 +37,17 @@
     </svg>
   </button>
 
-  <!-- Dropdown -->
+  <!-- Dropdown Panel -->
   @if (isOpen()) {
-    <div class="fixed inset-0 z-40" (click)="isOpen.set(false)"></div>
     <div
-      class="absolute mt-2 w-full bg-white rounded-2xl shadow-xl min-h-[260px] max-h-[70vh] flex flex-col"
+      class="absolute mt-2 w-full bg-white rounded-2xl shadow-xl border border-gray-200 min-h-[260px] max-h-[70vh] flex flex-col"
       (click)="$event.stopPropagation()"
     >
-      <!-- Search -->
-      <div class="p-4">
-        <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg">
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <!-- Rest of the dropdown content stays exactly the same -->
+      <!-- Search Box -->
+      <div class="p-4 border-b border-gray-100">
+        <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500 transition-all">
+          <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -39,43 +57,75 @@
           </svg>
           <input
             type="text"
-            placeholder="Search"
-            class="w-full bg-transparent outline-none text-sm"
-            (click)="$event.stopPropagation()"
+            placeholder="Search options..."
+            class="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
+            [value]="search()"
             (input)="search.set($any($event.target).value)"
+            (click)="$event.stopPropagation()"
           />
+          @if (search()) {
+            <button
+              type="button"
+              class="text-gray-400 hover:text-gray-600"
+              (click)="search.set(''); $event.stopPropagation()"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          }
         </div>
       </div>
 
-      <!-- Options -->
-      <div class="overflow-y-auto px-4 flex-1">
-        @for (opt of filteredOptions(); track opt.value) {
-          <label
-            class="flex items-center justify-between py-3 cursor-pointer border-b border-gray-200 last:border-b-0"
-          >
-            <span class="text-sm text-gray-700">{{ opt.label }}</span>
-            <input
-              type="checkbox"
-              class="w-4 h-4 rounded border-gray-300"
-              [checked]="isChecked(opt.value)"
-              (change)="toggleOption(opt.value)"
-              (click)="$event.stopPropagation()"
-            />
-          </label>
+      <!-- Options List -->
+      <div class="overflow-y-auto px-4 py-2 flex-1">
+        @if (filteredOptions().length === 0) {
+          <div class="py-8 text-center text-gray-400 text-sm">
+            No options found
+          </div>
+        } @else {
+          @for (opt of filteredOptions(); track opt.value) {
+            <label
+              class="flex items-center justify-between py-3 cursor-pointer border-b border-gray-100 last:border-b-0 hover:bg-gray-50 -mx-4 px-4 transition-colors"
+            >
+              <span class="text-sm text-gray-700 flex-1">{{ opt.label }}</span>
+              <input
+                type="checkbox"
+                class="w-4 h-4 rounded border-gray-300 text-blue-600  accent-blue-600 cursor-pointer flex-shrink-0"
+                [checked]="isChecked(opt.value)"
+                (change)="toggleOption(opt.value)"
+                (click)="$event.stopPropagation()"
+              />
+            </label>
+          }
         }
       </div>
 
-      <!-- Footer -->
-      <div class="flex justify-between items-center px-4 py-3">
-        <button class="text-sm text-blue-600 hover:underline" (click)="selectAll()">
+      <!-- Footer Actions -->
+      <div class="flex justify-between items-center px-4 py-3 border-t border-gray-100 bg-gray-50">
+        <button
+          type="button"
+          class="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
+          (click)="selectAll(); $event.stopPropagation()"
+          [disabled]="filteredOptions().length === 0"
+          [class.opacity-50]="filteredOptions().length === 0"
+          [class.cursor-not-allowed]="filteredOptions().length === 0"
+        >
           Select All
         </button>
 
         <div class="flex gap-2">
-          <button class="px-4 py-1.5 text-sm border rounded-md" (click)="clearAll()">Clear</button>
           <button
-            class="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md"
-            (click)="doneSelection()"
+            type="button"
+            class="px-4 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+            (click)="clearAll(); $event.stopPropagation()"
+          >
+            Clear
+          </button>
+          <button
+            type="button"
+            class="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            (click)="doneSelection(); $event.stopPropagation()"
           >
             Done
           </button>

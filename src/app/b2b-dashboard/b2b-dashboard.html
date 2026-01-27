@@ -52,41 +52,45 @@
     <button (click)="open()" class="pb-3 text-lg text-">Advance Access</button>
 
     <app-toggle-component-container [isOpen]="isContainerOpen()" (closed)="close()">
-      <app-multi-select
-        id="option"
-        label="Option"
-        placeholder="Option Name"
-        [options]="optionList"
-        (done)="onMultiSelectDone($event)"
-      ></app-multi-select>
-      <app-multi-select
-        id="supplier"
-        label="Option"
-        placeholder="Option Name"
-        [options]="optionList"
-        (done)="onMultiSelectDone($event)"
-      ></app-multi-select>
-      <app-multi-select
-        id="user"
-        label="Option"
-        placeholder="Option Name"
-        [options]="optionList"
-        (done)="onMultiSelectDone($event)"
-      ></app-multi-select>
-      <app-multi-select
-        id="profitCenter"
-        label="Option"
-        placeholder="Option Name"
-        [options]="optionList"
-        (done)="onMultiSelectDone($event)"
-      ></app-multi-select>
-      <app-multi-select
-        id="provider"
-        label="Option"
-        placeholder="Option Name"
-        [options]="optionList"
-        (done)="onMultiSelectDone($event)"
-      ></app-multi-select>
+      <div>
+        <app-multi-select
+          id="fruits"
+          label="Category"
+          [options]="fruitOptions"
+          placeholder="Choose your favorite Category..."
+          (done)="onFruitSelection($event)"
+        />
+      </div>
+
+      <div>
+        <app-multi-select
+          id="colors"
+          label="Option Name"
+          [options]="colorOptions"
+          placeholder="Choose your Option Name ..."
+          (done)="onColorSelection($event)"
+        />
+      </div>
+
+      <div>
+        <app-multi-select
+          id="countries"
+          label="Supplier"
+          [options]="countryOptions"
+          placeholder="Choose Supplier to visit..."
+          (done)="onCountrySelection($event)"
+        />
+      </div>
+
+      <div>
+        <app-multi-select
+          id="provider"
+          label="Provider"
+          [options]="countryOptions"
+          placeholder="Choose Provider to visit..."
+          (done)="onCountrySelection($event)"
+        />
+      </div>
     </app-toggle-component-container>
   </div>
 

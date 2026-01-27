@@ -13,7 +13,7 @@ import { ToggleButtonComponent } from '../shared/components/toggle-button/toggle
 import { TableComponent } from '../shared/components/table/table.component';
 import { SettingsButton } from '../shared/components/button/settings-button/settings-button';
 import { OutlineButton } from '../shared/components/outline-button/outline-button';
-import { MultiSelect } from '../shared/components/select/multi-select/multi-select.component';
+import { MultiSelect, MultiSelectOption } from '../shared/components/select/multi-select/multi-select.component';
 import { OptionItem } from '../shared/components/select/select.types';
 type ColumnKey = string;
 
@@ -144,22 +144,59 @@ export class B2bDashboard {
   }
 
   //========== Advance Search Portion multiselect=========
-  optionList = [
-    { label: 'Option Name 1', value: 'opt1' },
-    { label: 'Option Name 2', value: 'opt2' },
-    { label: 'Option Name 3', value: 'opt3' },
+  fruitOptions: MultiSelectOption[] = [
+    { label: 'Apple', value: 'apple' },
+    { label: 'Banana', value: 'banana' },
+    { label: 'Orange', value: 'orange' },
+    { label: 'Mango', value: 'mango' },
+    { label: 'Strawberry', value: 'strawberry' },
+    { label: 'Grapes', value: 'grapes' },
+    { label: 'Watermelon', value: 'watermelon' },
+    { label: 'Pineapple', value: 'pineapple' },
   ];
 
-  supplierList = [
-    { label: 'Supplier A', value: 'a' },
-    { label: 'Supplier B', value: 'b' },
+  colorOptions: MultiSelectOption[] = [
+    { label: 'Red', value: 'red' },
+    { label: 'Blue', value: 'blue' },
+    { label: 'Green', value: 'green' },
+    { label: 'Yellow', value: 'yellow' },
+    { label: 'Purple', value: 'purple' },
+    { label: 'Orange', value: 'orange' },
+    { label: 'Pink', value: 'pink' },
+    { label: 'Black', value: 'black' },
+    { label: 'White', value: 'white' },
   ];
 
-  selectedFilters: Record<string, string[]> = {};
+  countryOptions: MultiSelectOption[] = [
+    { label: 'United States', value: 'us' },
+    { label: 'United Kingdom', value: 'uk' },
+    { label: 'Canada', value: 'ca' },
+    { label: 'Australia', value: 'au' },
+    { label: 'Germany', value: 'de' },
+    { label: 'France', value: 'fr' },
+    { label: 'Japan', value: 'jp' },
+    { label: 'Brazil', value: 'br' },
+    { label: 'India', value: 'in' },
+    { label: 'China', value: 'cn' },
+  ];
 
-  onMultiSelectDone(event: { id: string; values: string[] }) {
-    this.selectedFilters[event.id] = event.values;
-    console.log(this.selectedFilters);
+  selectedFruits: string[] = [];
+  selectedColors: string[] = [];
+  selectedCountries: string[] = [];
+
+  onFruitSelection(event: { id: string; values: string[] }) {
+    console.log('Fruits selected:', event);
+    this.selectedFruits = event.values;
+  }
+
+  onColorSelection(event: { id: string; values: string[] }) {
+    console.log('Colors selected:', event);
+    this.selectedColors = event.values;
+  }
+
+  onCountrySelection(event: { id: string; values: string[] }) {
+    console.log('Countries selected:', event);
+    this.selectedCountries = event.values;
   }
 
   //Table portion===========================
