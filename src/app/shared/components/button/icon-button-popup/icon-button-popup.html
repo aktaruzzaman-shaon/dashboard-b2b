@@ -3,7 +3,7 @@
   <button
     #triggerButton
     (click)="togglePopup()"
-    class="relative text-blue-400  rounded-full hover:bg-gray-100 transition-colors duration-200 "
+    class="relative text-blue-400 rounded-full hover:bg-gray-100 transition-colors duration-200"
     [attr.aria-expanded]="isOpen()"
     aria-haspopup="true"
   >
@@ -29,8 +29,8 @@
   @if (isOpen()) {
     <div
       #popupModal
+      class="absolute z-50 bg-white rounded-xl shadow-2xl"
       [ngClass]="getPopupPositionClasses()"
-      class="absolute z-50 bg-white rounded-lg shadow-2xl border border-gray-200 min-w-[100px] max-w-[90vw]"
       @slideIn
       (click)="$event.stopPropagation()"
     >

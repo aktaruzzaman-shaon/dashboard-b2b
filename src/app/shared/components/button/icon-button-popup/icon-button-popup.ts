@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, HostListener, input, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  HostListener,
+  input,
+  signal,
+  ViewChild,
+} from '@angular/core';
 export type PopupPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 @Component({
   selector: 'app-icon-button-popup',
@@ -38,7 +47,7 @@ export class IconButtonPopup {
       'top-right': 'bottom-full right-0 mb-2',
       'top-left': 'bottom-full left-0 mb-2',
       'bottom-right': 'top-full right-0 mt-2',
-      'bottom-left': 'top- left-20 mt-2',
+      'bottom-left': 'top-full left-0 mt-6',
     };
     return positions[this.position()] || positions['bottom-right'];
   }

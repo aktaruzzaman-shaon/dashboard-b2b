@@ -1,7 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
 import { Booking } from './table.types';
 import { ModalComponent } from '../modal/modal.component';
-import { SignButtonWithPopup } from '../button/sign-button-with-popup/sign-button-with-popup';
 import { IconButtonPopup } from '../button/icon-button-popup/icon-button-popup';
 
 @Component({
