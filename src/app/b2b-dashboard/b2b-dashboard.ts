@@ -65,7 +65,7 @@ export class B2bDashboard {
   //Travel Date FROM and TO  ====================================
   travelDateTo = signal<Date | null>(null);
   travelDateFrom = signal<Date | null>(null);
-  onDateToSelected(date: Date ): void {
+  onDateToSelected(date: Date |null ): void {
     console.log(date);
     this.travelDateTo.set(date);
     console.log('Travel Date To:', date);

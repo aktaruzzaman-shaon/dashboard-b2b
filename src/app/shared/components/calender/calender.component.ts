@@ -52,19 +52,6 @@ export class CalenderComponent {
   }
 
   //selected date
-  // selectDate(day: number | null, isNextMonth: boolean): void {
-  //   if (!day) return;
-
-  //   const selectedDate = new Date(
-  //     isNextMonth ? this.nextMonth.getFullYear() : this.currentMonth.getFullYear(),
-  //     isNextMonth ? this.nextMonth.getMonth() : this.currentMonth.getMonth(),
-  //     day,
-  //   );
-  //   this.selectedDate.set(selectedDate);
-  //   console.log('date selected', this.selectedDate);
-  //   this.dateSelected.emit(selectedDate);
-  // }
-
   selectDate(day: number | null, isNextMonth: boolean): void {
     if (!day) return;
 
@@ -87,9 +74,8 @@ export class CalenderComponent {
       isNextMonth ? this.nextMonth.getMonth() : this.currentMonth.getMonth(),
       day,
     );
-    console.log(date);
     return (
-      date === this.selectedDate() && date === this.selectedDate() && date === this.selectedDate()
+      date === this.selectedDate() 
     );
   }
 
