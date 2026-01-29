@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, output, Output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-calender',
@@ -7,10 +7,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './calender.component.css',
 })
 export class CalenderComponent {
-  @Input() label: string = 'Select Date';
-  @Input() placeholder: string = 'DD/MM/YYYY';
-  @Input() selectedDate: Date | null = null;
-  @Output() dateSelected = new EventEmitter<Date>();
+  label = input<string>('Select Date');
+  placeholder = input<string>('DD/MM/YYYY');
+  dateSelected = output<Date | null>();
+  selectedDate = signal<Date | null>(null);
 
   isOpen = false;
   currentMonth = new Date();
@@ -52,6 +52,19 @@ export class CalenderComponent {
   }
 
   //selected date
+  // selectDate(day: number | null, isNextMonth: boolean): void {
+  //   if (!day) return;
+
+  //   const selectedDate = new Date(
+  //     isNextMonth ? this.nextMonth.getFullYear() : this.currentMonth.getFullYear(),
+  //     isNextMonth ? this.nextMonth.getMonth() : this.currentMonth.getMonth(),
+  //     day,
+  //   );
+  //   this.selectedDate.set(selectedDate);
+  //   console.log('date selected', this.selectedDate);
+  //   this.dateSelected.emit(selectedDate);
+  // }
+
   selectDate(day: number | null, isNextMonth: boolean): void {
     if (!day) return;
 
@@ -60,8 +73,9 @@ export class CalenderComponent {
       isNextMonth ? this.nextMonth.getMonth() : this.currentMonth.getMonth(),
       day,
     );
-
-    this.selectedDate = selectedDate;
+    this.selectedDate.set(selectedDate);
+    console.log('date selected', this.selectedDate);
+    this.dateSelected.emit(selectedDate);
   }
 
   //which date is selected
@@ -73,11 +87,9 @@ export class CalenderComponent {
       isNextMonth ? this.nextMonth.getMonth() : this.currentMonth.getMonth(),
       day,
     );
-
+    console.log(date);
     return (
-      date.getDate() === this.selectedDate.getDate() &&
-      date.getMonth() === this.selectedDate.getMonth() &&
-      date.getFullYear() === this.selectedDate.getFullYear()
+      date === this.selectedDate() && date === this.selectedDate() && date === this.selectedDate()
     );
   }
 
@@ -92,19 +104,19 @@ export class CalenderComponent {
   }
 
   reset(): void {
-    this.selectedDate = null;
+    this.selectedDate.set(null);
   }
 
   //finally submit the date
   apply(): void {
     if (this.selectedDate) {
-      this.dateSelected.emit(this.selectedDate);
+      this.dateSelected.emit(this.selectedDate());
       this.isOpen = false;
     }
   }
 
   formatDate(date: Date | null): string {
-    if (!date) return this.placeholder;
+    if (!date) return this.placeholder();
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
@@ -112,6 +124,6 @@ export class CalenderComponent {
   }
 
   getDisplayValue(): string {
-    return this.formatDate(this.selectedDate);
+    return this.formatDate(this.selectedDate());
   }
 }

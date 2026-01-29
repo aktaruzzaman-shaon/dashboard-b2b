@@ -11,11 +11,12 @@ export class InputSelectorComponent {
   label = input.required<string>();
   options = input.required<DateRangeOption[]>();
   disabled = input<boolean>(false);
-  selectionChange = output<DateRangeOption[]>();
   private elementRef = inject(ElementRef);
   isOpen = signal<boolean>(false);
   selectedOptions = signal<DateRangeOption[]>([]);
   selectedIds = computed(() => new Set(this.selectedOptions().map((o) => o.id)));
+
+  selectionChange = output<DateRangeOption[]>();
 
   toggleDropdown() {
     if (this.disabled()) return;
@@ -26,6 +27,7 @@ export class InputSelectorComponent {
     this.isOpen.set(false);
   }
 
+  // updating the selected date and emiting the update date
   handleSelect(option: DateRangeOption) {
     this.selectedOptions.update((current) => {
       const exists = current.some((item) => item.id === option.id);
@@ -38,6 +40,7 @@ export class InputSelectorComponent {
     });
   }
 
+  // remove the selected date
   removeOption(event: Event, optionId: string) {
     event.stopPropagation();
     this.selectedOptions.update((current) => {

@@ -4,11 +4,12 @@
     <app-input-selector
       label="Travel Date Range"
       [options]="availableDateRanges"
+      (selectionChange)="onDateRangeSelected($event)"
     ></app-input-selector>
 
     <!-- ========== Travel Date FROM and TO  =========== -->
     <app-calender
-      label="Travel Date To"
+      label="Travel Date From"
       placeholder="DD/MM/YYYY"
       [selectedDate]="travelDateTo()"
       (dateSelected)="onDateToSelected($event)"

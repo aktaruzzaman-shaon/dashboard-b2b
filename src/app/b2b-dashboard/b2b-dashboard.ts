@@ -55,17 +55,17 @@ export class B2bDashboard {
     { id: 'd15-plus', label: 'Day 15 & Beyond', value: { type: 'range', start: 15, end: null } },
     { id: 'last-90', label: 'Last 90 days', value: { type: 'lookback', days: 90 } },
   ];
+
   currentSelection: DateRangeOption[] = [];
   onDateRangeSelected(selectedItems: DateRangeOption[]) {
     console.log('Received new selection:', selectedItems);
     this.currentSelection = selectedItems;
-    // API calls or filtering based on this data
   }
 
   //Travel Date FROM and TO  ====================================
   travelDateTo = signal<Date | null>(null);
   travelDateFrom = signal<Date | null>(null);
-  onDateToSelected(date: Date): void {
+  onDateToSelected(date: Date ): void {
     console.log(date);
     this.travelDateTo.set(date);
     console.log('Travel Date To:', date);
