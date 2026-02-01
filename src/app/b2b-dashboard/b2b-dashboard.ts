@@ -48,12 +48,12 @@ type ColumnKey = string;
 export class B2bDashboard {
   // Travel Date range selection input ===========================
   availableDateRanges: DateRangeOption[] = [
-    { id: 'today', label: 'Today', value: { type: 'relative', val: 0 } },
-    { id: 'tomorrow', label: 'Tomorrow', value: { type: 'relative', val: 1 } },
-    { id: 'd3-d7', label: 'Day 3 to Day 7', value: { type: 'range', start: 3, end: 7 } },
-    { id: 'd7-d15', label: 'Day 7 to Day 15', value: { type: 'range', start: 7, end: 15 } },
-    { id: 'd15-plus', label: 'Day 15 & Beyond', value: { type: 'range', start: 15, end: null } },
-    { id: 'last-90', label: 'Last 90 days', value: { type: 'lookback', days: 90 } },
+    { id: 'today', label: 'Today', value: { start: 1, end: 0 } },
+    { id: 'tomorrow', label: 'Tomorrow', value: { start: 2, end: 0 } },
+    { id: 'd3-d7', label: 'Day 3 to Day 7', value: { start: 3, end: 7 } },
+    { id: 'd7-d15', label: 'Day 7 to Day 15', value: { start: 7, end: 15 } },
+    { id: 'd15-plus', label: 'Day 15 & Beyond', value: { start: 15, end: 100 } },
+    { id: 'last-90', label: 'Last 90 days', value: { start: 1, days: 90 } },
   ];
 
   currentSelection: DateRangeOption[] = [];
@@ -64,11 +64,26 @@ export class B2bDashboard {
 
   // from and to date calculation
   getDateRange(selectedDateRange: DateRangeOption[]) {
-    const selectedRangeValueArray = []
-    for (const singleSelectedRange of selectedDateRange){
-      
+    const startDateArray = [];
+    const endDateArray = [];
+    for (const singleSelectedRange of selectedDateRange) {
+      startDateArray.push(singleSelectedRange.value.start);
+      endDateArray.push(singleSelectedRange.value.end);
     }
-   
+    const finalStartDate = Math.min(...startDateArray);
+    const finalEndDate = Math.max(...endDateArray);
+
+    const today = new Date();
+    const addDays = (days: number) => {
+      const d = new Date(today);
+      d.setDate(today.getDate() + days);
+      return d.toISOString();
+    };
+
+    return {
+      from: addDays(finalStartDate ?? 0),
+      to: finalEndDate !== null ? addDays(finalEndDate) : null,
+    };
   }
 
   //Travel Date FROM and TO  ====================================
