@@ -1,3 +1,19 @@
-<div class="">
-  <app-b2b-dashboard></app-b2b-dashboard>
+
+
+<div class="flex h-screen overflow-hidden bg-gray-50">
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Navbar -->
+    <app-navbar (toggleSidebar)="onToggleSidebar()"></app-navbar>
+
+    <!-- Page Content -->
+    <main class="flex-1 overflow-y-auto p-6">
+      <router-outlet>
+        <app-b2b-dashboard></app-b2b-dashboard>
+      </router-outlet>
+    </main>
+  </div>
 </div>

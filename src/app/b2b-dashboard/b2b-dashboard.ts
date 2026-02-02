@@ -45,6 +45,7 @@ type ColumnKey = string;
   templateUrl: './b2b-dashboard.html',
   styleUrl: './b2b-dashboard.css',
 })
+
 export class B2bDashboard {
   // Travel Date range selection input ===========================
   availableDateRanges: DateRangeOption[] = [

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { ButtonComponent } from './shared/components/button/button.component';
 import { SingleSelectComponent } from './shared/components/select/single-select/single-select.component';
 import { TableComponent } from './shared/components/table/table.component';
@@ -13,7 +13,10 @@ import { InputCoreComponent } from './shared/components/input/input-core/input-c
 import { DateSlider } from './shared/components/date-slider/date-slider';
 import { OutlineButton } from './shared/components/outline-button/outline-button';
 import { MultiSelect } from './shared/components/select/multi-select/multi-select.component';
-import { B2bDashboard } from "./b2b-dashboard/b2b-dashboard";
+import { B2bDashboard } from './b2b-dashboard/b2b-dashboard';
+import { Sidebar } from './shared/components/sidebar/sidebar';
+import { RouterModule } from '@angular/router';
+import { Navbar } from './shared/components/navbar/navbar';
 
 //MultiSelect option ITEM
 interface OptionItem {
@@ -37,12 +40,21 @@ interface OptionItem {
     DateSlider,
     OutlineButton,
     MultiSelect,
-    B2bDashboard
-],
+    B2bDashboard,
+    Sidebar,
+    RouterModule,
+    Navbar,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
+  // for sidebar and navbar toggling
+  @ViewChild(Sidebar) sidebarComponent!: Sidebar;
+
+  onToggleSidebar(): void {
+    this.sidebarComponent.toggleSidebar();
+  }
   // /----- for select component --------/
   protected readonly title = signal('dashboard');
   options = [
