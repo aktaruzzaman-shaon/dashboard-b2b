@@ -1,6 +1,7 @@
 <div class="">
   <div class="app-container flex flex-wrap items-end gap-4 w-full p-4">
     <!-- ======Travel Date range selection input ========-->
+
     <app-input-selector
       label="Travel Date Range"
       [options]="availableDateRanges"
@@ -8,18 +9,29 @@
     ></app-input-selector>
 
     <!-- ========== Travel Date FROM and TO  =========== -->
+
+    <!-- Travel From Date -->
     <app-calender
-      label="Travel Date From"
-      placeholder="DD/MM/YYYY"
-      (dateSelected)="onDateToSelected($event)"
-    ></app-calender>
+      [label]="'Travel From'"
+      [placeholder]="'Select travel dates'"
+      [dateRange]="allowedDateRange()"
+      [travelFromDate]="travelFrom()"
+      (fromDateSelected)="onFromDateSelected($event)"
+      (toDateSelected)="onToDateSelected($event)"
+    />
+
+    <!-- Travel To Date -->
     <app-calender
-      label="Travel Date To"
-      placeholder="DD/MM/YYYY"
-      (dateSelected)="onDateToSelected($event)"
-    ></app-calender>
+      [label]="'Travel To'"
+      [placeholder]="'Select travel dates'"
+      [dateRange]="allowedDateRange()"
+      [travelToDate]="travelTo()"
+      (fromDateSelected)="onFromDateSelected($event)"
+      (toDateSelected)="onToDateSelected($event)"
+    />
 
     <!-- ========== City Select =========== -->
+
     <app-single-select
       label="City"
       [items]="options"
@@ -27,6 +39,7 @@
     ></app-single-select>
 
     <!-- ========== Supplier Status =========== -->
+
     <app-select-menu
       label="Supplier Status"
       [options]="roleOptions()"
@@ -36,6 +49,7 @@
     </app-select-menu>
 
     <!-- ========== Yacht Type =========== -->
+
     <app-select-menu
       label="Yacht Type"
       [options]="roleOptions()"
@@ -45,9 +59,11 @@
     </app-select-menu>
 
     <!-- ========== Booking Reference =========== -->
+
     <app-input-core label="Booking Reference Number"></app-input-core>
 
     <!-- ========== Advanced Search Portion =========== -->
+
     @if (advanceButtonOpen()) {
       <button (click)="open()" class="pb-3 text-md text-blue-600 text-">Advance Access</button>
     }
@@ -100,11 +116,13 @@
   </div>
 
   <!-- ================  Date Selections  ====================== -->
+
   <div class="app-container">
-    <app-date-slider></app-date-slider>
+    <app-date-slider (dateSelected)="onSliderDateSelected($event)"></app-date-slider>
   </div>
 
   <!-- =============== Table Portions  ======================== -->
+
   <div class="app-container">
     <div class="flex justify-between">
       <!-- table status button -->
@@ -122,6 +140,7 @@
           />
         }
       </div>
+
       <!-- table column  customization button -->
       <div>
         <app-settings-button
@@ -134,13 +153,14 @@
         >
       </div>
     </div>
+
     <!-- table row modification toggle buttons -->
     <div class="mt-5">
       <app-toggle-component-container
         [isOpen]="isTableModificationContainerOpen()"
         [closeButton]="false"
       >
-        <div class="grid md:grid-cols-5 sm:grid-cols-2 sm:gap-x-20 md:gap-x-1.5 md:gap-y-1.5">
+        <div class="grid md:grid-cols-4 sm:grid-cols-2 sm:gap-5 md:gap-2">
           @for (singleColumn of tableColumns; track singleColumn.key) {
             <app-toggle-button
               [label]="singleColumn.label"
@@ -158,6 +178,7 @@
         [columns]="tableColumns"
         [columnVisibility]="columnVisibility()"
         (selectionChange)="onSelectionChange($event)"
+        [sliderSelectedDate]="sliderSelectedDate()"
       />
     </div>
 

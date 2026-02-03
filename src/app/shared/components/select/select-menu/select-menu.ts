@@ -11,14 +11,14 @@ export class SelectMenuComponent {
   // Signal Inputs
   label = input<string>('');
   options = input.required<SelectMenu[]>();
-  placeholder = input<string>('Select an option');
+  placeholder = input<string>('Select options');
 
-  // Signal Output
-  onSelection = output<any>();
+  // Signal Output (emit array)
+  onSelection = output<any[]>();
 
   // State Signals
   isOpen = signal(false);
-  selectedOption = signal<SelectMenu | null>(null);
+  selectedOptions = signal<SelectMenu[]>([]);
 
   uniqueId = `select-${Math.random().toString(36).substring(2, 9)}`;
 
@@ -28,10 +28,29 @@ export class SelectMenuComponent {
     this.isOpen.update((v) => !v);
   }
 
-  selectOption(option: SelectMenu) {
-    this.selectedOption.set(option);
-    this.isOpen.set(false);
-    this.onSelection.emit(option.value);
+  isSelected(option: SelectMenu): boolean {
+    return this.selectedOptions().some((o) => o.id === option.id);
+  }
+
+  toggleOption(option: SelectMenu) {
+    const current = this.selectedOptions();
+
+    if (this.isSelected(option)) {
+      // Unselect
+      this.selectedOptions.set(current.filter((o) => o.id !== option.id));
+    } else {
+      // Select
+      this.selectedOptions.set([...current, option]);
+    }
+
+    // Emit only values
+    this.onSelection.emit(this.selectedOptions().map((o) => o.value));
+  }
+
+  removeOption(option: SelectMenu) {
+    this.selectedOptions.set(this.selectedOptions().filter((o) => o.id !== option.id));
+
+    this.onSelection.emit(this.selectedOptions().map((o) => o.value));
   }
 
   @HostListener('document:click', ['$event'])

@@ -1,4 +1,4 @@
-<div class="min-w-[232.57px] relat">
+<div class="min-w-[232.57px] relative">
   <div class="relative">
     <label class="block text-sm font-medium text-gray-700 mb-2">{{ label() }}</label>
     <div class="relative">
@@ -28,10 +28,7 @@
     <!-- Calendar Modal -->
     @if (isOpen) {
       <div class="fixed inset-0 bg-black/35 z-40" (click)="closeCalendar()"></div>
-      <div
-        class="absolute top-4/5 -left-1/3  z-50 p-6 w-[48rem]"
-        (click)="closeCalendar()"
-      >
+      <div class="absolute top-4/5 -left-1/3 z-50 p-6 w-[48rem]" (click)="closeCalendar()">
         <div
           class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl"
           (click)="$event.stopPropagation()"
@@ -87,12 +84,42 @@
                 @for (day of getDaysInMonth(currentMonth); track $index) {
                   <button
                     (click)="selectDate(day, false)"
-                    [disabled]="!day"
-                    [class.bg-blue-500]="isSelected(day, false)"
+                    [disabled]="isDisabled(day, false)"
+                    [class.text-blue-600]="isInSelectedRange(day, false)"
+                    [class.text-green-700]="
+                      (isInAllowedRange(day, false) &&
+                        !isSelected(day, false) &&
+                        !isInSelectedRange(day, false)) ??
+                      false
+                    "
+                    [class.border-2]="
+                      (isRangeStart(day, false) || isRangeEnd(day, false)) &&
+                      !isSelected(day, false)
+                    "
+                    [class.border-green-500]="
+                      (isRangeStart(day, false) || isRangeEnd(day, false)) &&
+                      !isSelected(day, false)
+                    "
                     [class.text-white]="isSelected(day, false)"
-                    [class.hover:bg-blue-50]="day && !isSelected(day, false)"
+                    [class.text-green-700]="isInAllowedRange(day, false) && !isSelected(day, false)"
+                    [class.font-semibold]="isInAllowedRange(day, false) || isSelected(day, false)"
+                    [class.hover:bg-green-200]="
+                      day &&
+                      !isSelected(day, false) &&
+                      !isDisabled(day, false) &&
+                      isInAllowedRange(day, false)
+                    "
+                    [class.hover:bg-gray-100]="
+                      day &&
+                      !isSelected(day, false) &&
+                      !isDisabled(day, false) &&
+                      !isInAllowedRange(day, false)
+                    "
                     [class.rounded-full]="isSelected(day, false)"
-                    class="p-2 text-center text-sm transition-colors disabled:cursor-default disabled:text-transparent"
+                    [class.cursor-not-allowed]="isDisabled(day, false)"
+                    [class.opacity-30]="isDisabled(day, false)"
+                    [class.bg-gray-50]="isDisabled(day, false)"
+                    class="p-2 text-center text-sm transition-colors disabled:cursor-not-allowed disabled:text-gray-400"
                   >
                     {{ day }}
                   </button>
@@ -113,12 +140,39 @@
                 @for (day of getDaysInMonth(nextMonth); track $index) {
                   <button
                     (click)="selectDate(day, true)"
-                    [disabled]="!day"
-                    [class.bg-blue-500]="isSelected(day, true)"
+                    [disabled]="isDisabled(day, true)"
+                    [class.text-blue-600]="isInSelectedRange(day, true)"
+                    [class.text-green-700]="
+                      isInAllowedRange(day, true) &&
+                      !isSelected(day, true) &&
+                      !isInSelectedRange(day, true)
+                    "
+                    [class.border-2]="
+                      (isRangeStart(day, true) || isRangeEnd(day, true)) && !isSelected(day, true)
+                    "
+                    [class.border-green-500]="
+                      (isRangeStart(day, true) || isRangeEnd(day, true)) && !isSelected(day, true)
+                    "
                     [class.text-white]="isSelected(day, true)"
-                    [class.hover:bg-blue-50]="day && !isSelected(day, true)"
+                    [class.text-green-700]="isInAllowedRange(day, true) && !isSelected(day, true)"
+                    [class.font-semibold]="isInAllowedRange(day, true) || isSelected(day, true)"
+                    [class.hover:bg-green-200]="
+                      day &&
+                      !isSelected(day, true) &&
+                      !isDisabled(day, true) &&
+                      isInAllowedRange(day, true)
+                    "
+                    [class.hover:bg-gray-100]="
+                      day &&
+                      !isSelected(day, true) &&
+                      !isDisabled(day, true) &&
+                      !isInAllowedRange(day, true)
+                    "
                     [class.rounded-full]="isSelected(day, true)"
-                    class="p-2 text-center text-sm transition-colors disabled:cursor-default disabled:text-transparent"
+                    [class.cursor-not-allowed]="isDisabled(day, true)"
+                    [class.opacity-30]="isDisabled(day, true)"
+                    [class.bg-gray-50]="isDisabled(day, true)"
+                    class="p-2 text-center text-sm transition-colors disabled:cursor-not-allowed disabled:text-gray-400"
                   >
                     {{ day }}
                   </button>
@@ -127,6 +181,15 @@
             </div>
           </div>
 
+          <!-- Selected Date Info -->
+          <!-- @if (tempSelectedDate()) {
+            <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <p class="text-sm text-blue-800">
+                <span class="font-semibold">Selected Date:</span>
+                {{ formatDate(tempSelectedDate()) }}
+              </p>
+            </div>
+          } -->
           <!-- Action Buttons -->
           <div class="flex justify-start gap-3 mt-6">
             <button
@@ -137,7 +200,7 @@
             </button>
             <button
               (click)="apply()"
-              [disabled]="!selectedDate()"
+              [disabled]="!tempFromDate() && !tempToDate()"
               class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               Apply

@@ -9,7 +9,7 @@
     >
       @for (col of columns(); track col.key) {
         @if (isVisible(col.key)) {
-          <div
+          <!-- <div
             class="flex gap-x-1 cursor-pointer hover:text-gray-800 transition-colors"
             (click)="onSortColumn(col.label)"
           >
@@ -24,11 +24,60 @@
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="text-gray-400"
+              class="text-black-700"
             >
               <path d="m7 15 5 5 5-5" />
               <path d="m7 9 5-5 5 5" />
             </svg>
+          </div> -->
+          <div class="flex items-center text-xs font-semibold text-gray-500 uppercase">
+            <span class="select-none">{{ col.label }}</span>
+
+            <div class="flex flex-col -space-y-1">
+              <!-- ASC button -->
+              <button
+                type="button"
+                class="hover:text-gray-800 transition-colors"
+                (click)="onSortColumn(col.label, 'asc')"
+                aria-label="Sort ascending"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m7 14 5-5 5 5" />
+                </svg>
+              </button>
+
+              <!-- DESC button -->
+              <button
+                type="button"
+                class="hover:text-gray-800 transition-colors"
+                aria-label="Sort descending"
+                (click)="onSortColumn(col.label, 'desc')"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m7 10 5 5 5-5" />
+                </svg>
+              </button>
+            </div>
           </div>
         }
       }
@@ -36,7 +85,7 @@
 
     <!-- TABLE BODY -->
     <div class="space-y-4 mt-2">
-      @for (booking of bookings; track booking.reference) {
+      @for (booking of bookings(); track booking.reference) {
         <div
           class="grid gap-1 items-center px-6 py-2 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-all cursor-pointer"
           [class.border-sky-500]="isRowSelected(booking.reference)"

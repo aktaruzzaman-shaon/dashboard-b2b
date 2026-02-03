@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output, signal, computed } from '@angular/core';
 import { Booking } from './table.types';
 import { ModalComponent } from '../modal/modal.component';
 import { IconButtonPopup } from '../button/icon-button-popup/icon-button-popup';
@@ -9,16 +9,19 @@ import { IconButtonPopup } from '../button/icon-button-popup/icon-button-popup';
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
+
 export class TableComponent {
   columns = input<{ key: string; label: string }[]>([]);
   columnVisibility = input<Record<string, boolean>>({});
   selectedReferences = new Set<string>();
   selectionChange = output<string[]>();
   referenceDetailsModalOpen = signal<boolean>(false);
+  sliderSelectedDate = input<Date | null>(null);
 
-  bookings: Booking[] = [
+  // 🔹 Original bookings data (immutable source)
+  private readonly originalBookings: Booking[] = [
     {
-      travelDate: '13 Oct 2024',
+      travelDate: '18 Feb 2026',
       reference: '264654654984641',
       optionName: 'From Dubai Marina Sightseeing Yacht',
       type: 'Private',
@@ -33,12 +36,12 @@ export class TableComponent {
       provider: 'Paramount Tourism',
     },
     {
-      travelDate: '13 Oct 2024',
+      travelDate: '2 Feb 2026',
       reference: '264654654984642',
       optionName: 'From Dubai Marina Sightseeing Yacht',
       type: 'Private',
       startTime: '10:00 AM',
-      duration: '4 Hours',
+      duration: '5 Hours',
       guests: '8Adult 4 Child 2 Infant',
       sold: { cost: 149, sale: 200 },
       confirmation: 'YCTG5498641',
@@ -48,7 +51,7 @@ export class TableComponent {
       provider: 'Paramount Tourism',
     },
     {
-      travelDate: '13 Oct 2024',
+      travelDate: '22 Feb 2026',
       reference: '264654654984642111',
       optionName: 'From Dubai Marina Sightseeing Yacht',
       type: 'Private',
@@ -63,7 +66,7 @@ export class TableComponent {
       provider: 'Paramount Tourism',
     },
     {
-      travelDate: '13 Oct 2024',
+      travelDate: '10 Feb 2026',
       reference: '26465465498464234234',
       optionName: 'From Dubai Marina Sightseeing Yacht',
       type: 'Private',
@@ -77,7 +80,128 @@ export class TableComponent {
       user: 'Rajesh Verma',
       provider: 'Paramount Tourism',
     },
+    {
+      travelDate: '27 Feb 2026',
+      reference: '2646546549846425678',
+      optionName: 'From Dubai Marina Sightseeing Yacht',
+      type: 'Private',
+      startTime: '10:00 AM',
+      duration: '7 Hours',
+      guests: '8Adult 4 Child 2 Infant',
+      sold: { cost: 149, sale: 200 },
+      confirmation: 'YCTG5498641',
+      supplier: 'Karan Verma',
+      status: 'Cancelled',
+      user: 'Rajesh Verma',
+      provider: 'Paramount Tourism',
+    },
   ];
+
+  // 🔹 Sorting state signals
+  currentSortKey = signal<string>('travelDate');
+  currentSortType = signal<'asc' | 'desc'>('asc');
+
+  // 🔹 Map display labels to actual property keys
+  private readonly keyMap: Record<string, string> = {
+    'Travel Date': 'travelDate',
+    Reference: 'reference',
+    'Option Name': 'optionName',
+    Type: 'type',
+    'Start Time': 'startTime',
+    Duration: 'duration',
+    Guests: 'guests',
+    Confirmation: 'confirmation',
+    Supplier: 'supplier',
+    Status: 'status',
+    User: 'user',
+    Provider: 'provider',
+  };
+
+  // 🔹 Computed signal for sorted and filtered bookings
+  bookings = computed(() => {
+    const key = this.currentSortKey();
+    const sortingType = this.currentSortType();
+    const filterDate = this.sliderSelectedDate();
+
+    const direction = sortingType === 'asc' ? 1 : -1;
+    const actualKey = this.keyMap[key] || key;
+
+    let data = [...this.originalBookings];
+
+    // 🔹 Optional date filter (travelDate only)
+    if (filterDate) {
+      const targetDate = this.normalizeDate(filterDate);
+      data = data.filter((booking) => {
+        const bookingDate = this.normalizeDate(booking.travelDate);
+        return bookingDate === targetDate;
+      });
+    }
+
+    // Sorting with type-safe key access
+    data.sort((a, b) => {
+      const valueA = a[actualKey as keyof typeof a];
+      const valueB = b[actualKey as keyof typeof b];
+
+      // Handle null/undefined values
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
+
+      // Special handling for travelDate (format: "13 Oct 2024")
+      if (actualKey === 'travelDate') {
+        const dateA = new Date(valueA as string);
+        const dateB = new Date(valueB as string);
+        return (dateA.getTime() - dateB.getTime()) * direction;
+      }
+
+      // Special handling for duration (format: "4 Hours")
+      if (actualKey === 'duration') {
+        const numA = parseInt(String(valueA).split(' ')[0], 10);
+        const numB = parseInt(String(valueB).split(' ')[0], 10);
+        return (numA - numB) * direction;
+      }
+
+      // Special handling for nested sold object
+      if (actualKey === 'cost' || actualKey === 'sale') {
+        const soldA = (a as any).sold;
+        const soldB = (b as any).sold;
+        const numA = soldA?.[actualKey] ?? 0;
+        const numB = soldB?.[actualKey] ?? 0;
+        return (numA - numB) * direction;
+      }
+
+      // Date comparison
+      if (valueA instanceof Date && valueB instanceof Date) {
+        return (valueA.getTime() - valueB.getTime()) * direction;
+      }
+
+      // Number comparison
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return (valueA - valueB) * direction;
+      }
+
+      // Boolean comparison
+      if (typeof valueA === 'boolean' && typeof valueB === 'boolean') {
+        return (Number(valueA) - Number(valueB)) * direction;
+      }
+
+      // Default: Case-insensitive string comparison with locale support
+      return (
+        String(valueA)
+          .toLowerCase()
+          .localeCompare(String(valueB).toLowerCase(), undefined, {
+            numeric: true,
+            sensitivity: 'base',
+          }) * direction
+      );
+    });
+
+    return data;
+  });
+
+  constructor() {
+    console.log('Slider selected date in table component:', this.sliderSelectedDate());
+  }
 
   isVisible(key: string): boolean {
     return this.columnVisibility()[key] !== false;
@@ -87,8 +211,16 @@ export class TableComponent {
     return this.columns().filter((col) => this.isVisible(col.key)).length;
   }
 
-  onSortColumn(label: string) {
-    console.log('Sort by:', label);
+  // Date normalizer for filtering
+  private normalizeDate(date: string | Date): string {
+    const d = new Date(date);
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  }
+
+  // 🔹 Method to trigger sorting (called from template)
+  onSortColumn(key: string, sortingType: 'asc' | 'desc' = 'asc'): void {
+    this.currentSortKey.set(key);
+    this.currentSortType.set(sortingType);
   }
 
   getStatusClass(status: string): string {
@@ -179,7 +311,7 @@ export class TableComponent {
   }
 
   selectAll(): void {
-    this.bookings.forEach((booking) => {
+    this.bookings().forEach((booking) => {
       this.selectedReferences.add(booking.reference);
     });
     this.emitSelectionChange();
@@ -199,7 +331,7 @@ export class TableComponent {
   }
 
   isAllSelected(): boolean {
-    return this.bookings.length > 0 && this.selectedReferences.size === this.bookings.length;
+    return this.bookings().length > 0 && this.selectedReferences.size === this.bookings().length;
   }
 
   getSelectedCount(): number {

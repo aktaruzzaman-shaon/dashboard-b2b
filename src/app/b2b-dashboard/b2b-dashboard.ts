@@ -1,7 +1,7 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { InputSelectorComponent } from '../shared/components/input/input-selector/input-selector.component';
 import { DateRangeOption } from '../shared/components/input/input-selector/input-selector.types';
-import { CalenderComponent } from '../shared/components/calender/calender.component';
+import { CalenderComponent, DateRange } from '../shared/components/calender/calender.component';
 import { SingleSelectComponent } from '../shared/components/select/single-select/single-select.component';
 import { InputCoreComponent } from '../shared/components/input/input-core/input-core.component';
 import { SelectMenuComponent } from '../shared/components/select/select-menu/select-menu';
@@ -45,9 +45,9 @@ type ColumnKey = string;
   templateUrl: './b2b-dashboard.html',
   styleUrl: './b2b-dashboard.css',
 })
-
 export class B2bDashboard {
   // Travel Date range selection input ===========================
+
   availableDateRanges: DateRangeOption[] = [
     { id: 'today', label: 'Today', value: { start: 1, end: 0 } },
     { id: 'tomorrow', label: 'Tomorrow', value: { start: 2, end: 0 } },
@@ -57,46 +57,175 @@ export class B2bDashboard {
     { id: 'last-90', label: 'Last 90 days', value: { start: 1, days: 90 } },
   ];
 
-  currentSelection: DateRangeOption[] = [];
+  // currentSelection: DateRangeOption[] = [];
+  currentSelection = signal<DateRangeOption[]>([]);
+
   onDateRangeSelected(selectedItems: DateRangeOption[]) {
     console.log('Received new selection:', selectedItems);
-    this.currentSelection = selectedItems;
+    this.currentSelection.set(selectedItems);
   }
 
+  ////////////// For calender only portion //////////////
   // from and to date calculation
-  getDateRange(selectedDateRange: DateRangeOption[]) {
+
+  //Travel Date FROM and TO  ====================================
+  // travelDateTo = signal<Date | null>(null);
+  // travelDateFrom = signal<Date | null>(null);
+  // onDateToSelected(date: Date | null): void {
+  //   console.log(date);
+  //   this.travelDateTo.set(date);
+  //   console.log('Travel Date To:', date);
+  // }
+  //
+
+  allowedDateRange = signal<DateRange | null>(null);
+
+  // selectedDateRange = [{ id: 'd3-d7', label: 'Day 3 to Day 7', value: { start: 3, end: 7 } }];
+
+  selectedDateRange = computed(() => this.currentSelection());
+
+
+  // constructor() {
+  //   effect(() => {
+  //     console.log('Selected Date Range changed:', this.selectedDateRange);
+  //     const currentRange = this.selectedDateRange;
+  //     this.getDateRange(this.selectedDateRange);
+  //   });
+  // }
+
+  constructor() {
+  effect(() => {
+    const ranges = this.selectedDateRange();
+    this.getDateRange(ranges);
+  });
+}
+
+
+  getDateRange(selectedDateRange: DateRangeOption[] | DateRangeOption) {
     const startDateArray = [];
     const endDateArray = [];
+    if (!Array.isArray(selectedDateRange)) {
+      selectedDateRange = [selectedDateRange];
+    }
     for (const singleSelectedRange of selectedDateRange) {
       startDateArray.push(singleSelectedRange.value.start);
       endDateArray.push(singleSelectedRange.value.end);
     }
+
     const finalStartDate = Math.min(...startDateArray);
     const finalEndDate = Math.max(...endDateArray);
+    console.log('Final Start Date (days from today):', finalStartDate);
+    console.log('Final End Date (days from today):', finalEndDate);
 
     const today = new Date();
     const addDays = (days: number) => {
       const d = new Date(today);
       d.setDate(today.getDate() + days);
-      return d.toISOString();
+      return d;
     };
 
-    return {
+    this.allowedDateRange.set({
       from: addDays(finalStartDate ?? 0),
-      to: finalEndDate !== null ? addDays(finalEndDate) : null,
-    };
+      to: addDays(finalEndDate),
+    });
   }
 
-  //Travel Date FROM and TO  ====================================
-  travelDateTo = signal<Date | null>(null);
-  travelDateFrom = signal<Date | null>(null);
-  onDateToSelected(date: Date | null): void {
-    console.log(date);
-    this.travelDateTo.set(date);
-    console.log('Travel Date To:', date);
+  // Selected travel dates
+  travelFrom = signal<Date | null>(null);
+  travelTo = signal<Date | null>(null);
+
+  // For setting the date range via input fields
+  rangeFromInput: string = '';
+  rangeToInput: string = '';
+
+  setDateRange(): void {
+    console.log(this.rangeFromInput, this.rangeToInput);
+    const value = this.getDateRange(this.selectedDateRange()) ?? null;
+    this.allowedDateRange.set(value);
+    if (this.rangeFromInput && this.rangeToInput) {
+      const fromDate = new Date(this.rangeFromInput + 'T00:00:00');
+      const toDate = new Date(this.rangeToInput + 'T00:00:00');
+      const value = this.getDateRange(this.selectedDateRange());
+      // Validate that from is before to
+      if (fromDate <= toDate) {
+        this.allowedDateRange.set({ from: fromDate, to: toDate });
+        console.log(this.allowedDateRange());
+
+        // Clear travel dates if they're outside the new range
+        if (this.travelFrom() && !this.isDateInRange(this.travelFrom()!, fromDate, toDate)) {
+          this.travelFrom.set(null);
+        }
+        if (this.travelTo() && !this.isDateInRange(this.travelTo()!, fromDate, toDate)) {
+          this.travelTo.set(null);
+        }
+      } else {
+        alert('Range start date must be before or equal to range end date');
+      }
+    }
+  }
+
+  clearDateRange(): void {
+    this.allowedDateRange.set(null);
+    this.rangeFromInput = '';
+    this.rangeToInput = '';
+    this.clearTravelDates();
+  }
+
+  isDateInRange(date: Date, from: Date, to: Date): boolean {
+    return date >= from && date <= to;
+  }
+
+  onFromDateSelected(date: Date | null): void {
+    this.travelFrom.set(date);
+  }
+
+  onToDateSelected(date: Date | null): void {
+    this.travelTo.set(date);
+  }
+
+  clearTravelDates(): void {
+    this.travelFrom.set(null);
+    this.travelTo.set(null);
+  }
+
+  confirmBooking(): void {
+    if (this.travelFrom() && this.travelTo()) {
+      alert(
+        `Booking confirmed!\nFrom: ${this.formatDisplayDate(this.travelFrom()!)}\nTo: ${this.formatDisplayDate(this.travelTo()!)}\nDuration: ${this.calculateTravelDuration()} days`,
+      );
+    }
+  }
+
+  formatDisplayDate(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    return date.toLocaleDateString('en-US', options);
+  }
+
+  // calculate travel duration
+  calculateTravelDuration(): number {
+    if (!this.travelFrom() || !this.travelTo()) return 0;
+    const diffTime = Math.abs(this.travelTo()!.getTime() - this.travelFrom()!.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
+
+  // calculate range duration
+  calculateRangeDuration(): number {
+    if (!this.allowedDateRange()) return 0;
+    const diffTime = Math.abs(
+      this.allowedDateRange()!.to.getTime() - this.allowedDateRange()!.from.getTime(),
+    );
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays + 1; // Include both start and end dates
   }
 
   //City Select =============================
+
   protected readonly title = signal('dashboard');
   options = [
     { label: 'Dubai ', value: 1 },
@@ -109,6 +238,7 @@ export class B2bDashboard {
   }
 
   //Supplier Status ====================================
+
   roleOptions = signal<SelectMenu[]>([
     {
       id: 'fe',
@@ -138,6 +268,7 @@ export class B2bDashboard {
   }
 
   //Yacht Type =========================================
+
   // oleOptions = signal<SelectMenu[]>([
   //   {
   //     id: 'fe',
@@ -181,6 +312,7 @@ export class B2bDashboard {
   }
 
   //========== Advance Search Portion multiselect=========
+
   fruitOptions: MultiSelectOption[] = [
     { label: 'Apple', value: 'apple' },
     { label: 'Banana', value: 'banana' },
@@ -236,6 +368,14 @@ export class B2bDashboard {
     this.selectedCountries = event.values;
   }
 
+  // date slider portion===========================
+
+  sliderSelectedDate = signal<Date | null>(null);
+  onSliderDateSelected(date: Date) {
+    this.sliderSelectedDate.set(date);
+    console.log('Slider selected date:', date);
+  }
+
   //Table portion===========================
 
   // for status buttons
@@ -279,7 +419,6 @@ export class B2bDashboard {
     { key: 'status', label: 'Status' },
     { key: 'user', label: 'User' },
     { key: 'provider', label: 'Provider' },
-    { key: 'actions', label: 'Details' },
   ];
 
   // 🔹 visibility state per column
