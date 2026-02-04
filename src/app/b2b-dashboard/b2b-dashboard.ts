@@ -46,18 +46,15 @@ type ColumnKey = string;
   styleUrl: './b2b-dashboard.css',
 })
 export class B2bDashboard {
-
-
   //=============== Travel Date range selection input =================
-
 
   availableDateRanges: DateRangeOption[] = [
     { id: 'today', label: 'Today', value: { start: 1, end: 0 } },
     { id: 'tomorrow', label: 'Tomorrow', value: { start: 2, end: 0 } },
     { id: 'd3-d7', label: 'Day 3 to Day 7', value: { start: 3, end: 7 } },
     { id: 'd7-d15', label: 'Day 7 to Day 15', value: { start: 7, end: 15 } },
-    { id: 'd15-plus', label: 'Day 15 & Beyond', value: { start: 15, end: 100 } },
-    { id: 'last-90', label: 'Last 90 days', value: { start: 1, days: 90 } },
+    { id: 'd15-plus', label: 'Day 15 & Beyond', value: { start: 15, end: 365 } },
+    { id: 'last-90', label: 'Last 90 days', value: { start: -90, end: 0 } },
   ];
 
   currentSelection = signal<DateRangeOption[]>([]);
@@ -66,15 +63,7 @@ export class B2bDashboard {
     this.currentSelection.set(selectedItems);
   }
 
-
-
-
-
   ////////////// For calender only portion /////////////
-
-
-
-
 
   allowedDateRange = signal<DateRange | null>(null);
   selectedDateRange = computed(() => this.currentSelection());
@@ -86,12 +75,16 @@ export class B2bDashboard {
     });
   }
 
+  // here calculate date range from selected options
   getDateRange(selectedDateRange: DateRangeOption[] | DateRangeOption) {
+    
     const startDateArray = [];
     const endDateArray = [];
+
     if (!Array.isArray(selectedDateRange)) {
       selectedDateRange = [selectedDateRange];
     }
+
     for (const singleSelectedRange of selectedDateRange) {
       startDateArray.push(singleSelectedRange.value.start);
       endDateArray.push(singleSelectedRange.value.end);
@@ -99,8 +92,6 @@ export class B2bDashboard {
 
     const finalStartDate = Math.min(...startDateArray);
     const finalEndDate = Math.max(...endDateArray);
-    console.log('Final Start Date (days from today):', finalStartDate);
-    console.log('Final End Date (days from today):', finalEndDate);
 
     const today = new Date();
     const addDays = (days: number) => {
@@ -209,13 +200,7 @@ export class B2bDashboard {
     return diffDays + 1; // Include both start and end dates
   }
 
-
-
-
   //================ City Select =============================
-
-
-
 
   protected readonly title = signal('dashboard');
   options = [
@@ -258,8 +243,6 @@ export class B2bDashboard {
     this.selectedData.set(data);
   }
 
-
-
   //Yacht Type =========================================
 
   // oleOptions = signal<SelectMenu[]>([
@@ -292,11 +275,7 @@ export class B2bDashboard {
   //   this.selectedData.set(data);
   // }
 
-
-
   // =========Advance Search Portion==========
-
-
 
   isContainerOpen = signal(false);
   advanceButtonOpen = signal(true);
@@ -309,11 +288,7 @@ export class B2bDashboard {
     this.isContainerOpen.set(false);
   }
 
-
-
   //========== Advance Search Portion multiselect=========
-
-
 
   fruitOptions: MultiSelectOption[] = [
     { label: 'Apple', value: 'apple' },
@@ -370,13 +345,7 @@ export class B2bDashboard {
     this.selectedCountries = event.values;
   }
 
-
-
-
   // date slider portion===========================
-
-
-
 
   sliderSelectedDate = signal<Date | null>(null);
   onSliderDateSelected(date: Date) {
@@ -384,11 +353,7 @@ export class B2bDashboard {
     console.log('Slider selected date:', date);
   }
 
-
-
   //======================= Table portion=======================
-
-
 
   // for status buttons
   statuses = signal<StatusButtonData[]>([

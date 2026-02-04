@@ -58,7 +58,6 @@ export class CalenderComponent {
   constructor() {
     // Sync temp dates with selected dates from parent
     effect(() => {
-      console.log('Syncing temp dates with travel dates from parent', this.dateRange());
       this.tempFromDate.set(this.travelFromDate());
       this.tempToDate.set(this.travelToDate());
     });
@@ -385,7 +384,6 @@ export class CalenderComponent {
   // }
 
   getDisplayValue(): string {
-    console.log('Getting display value for date type:', this.dateRange());
     if (this.tempFromDate() && this.showDateType() === 'fromDate') {
       return this.formatDate(this.tempFromDate());
     } else if (
