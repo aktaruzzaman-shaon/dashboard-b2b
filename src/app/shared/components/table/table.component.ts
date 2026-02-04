@@ -1,4 +1,4 @@
-import { Component, input, output, signal, computed } from '@angular/core';
+import { Component, input, output, signal, computed, model } from '@angular/core';
 import { Booking } from './table.types';
 import { ModalComponent } from '../modal/modal.component';
 import { IconButtonPopup } from '../button/icon-button-popup/icon-button-popup';
@@ -9,7 +9,6 @@ import { IconButtonPopup } from '../button/icon-button-popup/icon-button-popup';
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
-
 export class TableComponent {
   columns = input<{ key: string; label: string }[]>([]);
   columnVisibility = input<Record<string, boolean>>({});
@@ -17,6 +16,8 @@ export class TableComponent {
   selectionChange = output<string[]>();
   referenceDetailsModalOpen = signal<boolean>(false);
   sliderSelectedDate = input<Date | null>(null);
+  activeStatus = input<string | null>(null);
+  statusWiseRowCountChange = output<Record<string, number>>();
 
   // 🔹 Original bookings data (immutable source)
   private readonly originalBookings: Booking[] = [
@@ -117,16 +118,48 @@ export class TableComponent {
     Provider: 'provider',
   };
 
+  // updateStatusCounts(data: any[]): void {
+  //   const counts: Record<string, number> = {};
+
+  //   for (const row of data) {
+  //     counts[row.status] = (counts[row.status] || 0) + 1;
+  //   }
+
+  //   this.statusWiseRowCountChange.emit(counts);
+  // }
+
+  updateStatusCounts(data: any[]) {
+  const counts: Record<string, number> = {
+    Pending: 0,
+    Accepted: 0,
+    Rejected: 0,
+    Cancelled: 0,
+    All: data.length, // 👈 always original length
+  };
+
+  for (const row of data) {
+    if (counts[row.status] !== undefined) {
+      counts[row.status]++;
+    }
+  }
+
+  this.statusWiseRowCountChange.emit(counts);
+}
+
+
   // 🔹 Computed signal for sorted and filtered bookings
   bookings = computed(() => {
     const key = this.currentSortKey();
     const sortingType = this.currentSortType();
     const filterDate = this.sliderSelectedDate();
+    const activeStatus = this.activeStatus();
 
     const direction = sortingType === 'asc' ? 1 : -1;
     const actualKey = this.keyMap[key] || key;
 
     let data = [...this.originalBookings];
+
+    this.updateStatusCounts(data);
 
     // 🔹 Optional date filter (travelDate only)
     if (filterDate) {
@@ -135,6 +168,12 @@ export class TableComponent {
         const bookingDate = this.normalizeDate(booking.travelDate);
         return bookingDate === targetDate;
       });
+    }
+
+    // 🔹 Optional status filter
+    if (activeStatus && activeStatus !== 'All') {
+      data = data.filter((booking) => booking.status === activeStatus);
+      // this.statusWiseRowCountChange.emit(data.length);
     }
 
     // Sorting with type-safe key access
@@ -187,12 +226,10 @@ export class TableComponent {
 
       // Default: Case-insensitive string comparison with locale support
       return (
-        String(valueA)
-          .toLowerCase()
-          .localeCompare(String(valueB).toLowerCase(), undefined, {
-            numeric: true,
-            sensitivity: 'base',
-          }) * direction
+        String(valueA).toLowerCase().localeCompare(String(valueB).toLowerCase(), undefined, {
+          numeric: true,
+          sensitivity: 'base',
+        }) * direction
       );
     });
 

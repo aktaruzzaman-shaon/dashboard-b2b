@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, model, output, signal } from '@angular/core';
 import { InputSelectorComponent } from '../shared/components/input/input-selector/input-selector.component';
 import { DateRangeOption } from '../shared/components/input/input-selector/input-selector.types';
 import { CalenderComponent, DateRange } from '../shared/components/calender/calender.component';
@@ -23,6 +23,8 @@ import { ModalComponent } from '../shared/components/modal/modal.component';
 import { ButtonWithPopup } from '../shared/components/button/button-with-popup/button-with-popup';
 import { DateSlider } from '../shared/components/date-slider/date-slider';
 type ColumnKey = string;
+
+type StatusCountMap = Record<string, number>;
 
 @Component({
   selector: 'app-b2b-dashboard',
@@ -77,7 +79,6 @@ export class B2bDashboard {
 
   // here calculate date range from selected options
   getDateRange(selectedDateRange: DateRangeOption[] | DateRangeOption) {
-    
     const startDateArray = [];
     const endDateArray = [];
 
@@ -356,19 +357,28 @@ export class B2bDashboard {
   //======================= Table portion=======================
 
   // for status buttons
+  // statuses = signal<StatusButtonData[]>([
+  //   { label: 'Pending', count: 30, value: 'Pending' },
+  //   { label: 'Accepted', count: 12, value: 'Accepted' },
+  //   { label: 'Rejected', count: 5, value: 'Rejected' },
+  //   { label: 'Cancelled', count: 8, value: 'Cancelled' },
+  //   { label: 'All', count: 5, value: 'All' },
+  // ]);
+
   statuses = signal<StatusButtonData[]>([
-    { label: 'Pending', count: 30, value: 'pending' },
-    { label: 'Approved', count: 12, value: 'approved' },
-    { label: 'Rejected', count: 5, value: 'rejected' },
-    { label: 'ALL', count: 5, value: 'all' },
+    { label: 'Pending', value: 'Pending' },
+    { label: 'Accepted', value: 'Accepted' },
+    { label: 'Rejected', value: 'Rejected' },
+    { label: 'Cancelled', value: 'Cancelled' },
+    { label: 'All', value: 'All' },
   ]);
 
-  activeStatus = signal<string | null>(null);
+  activeStatus = signal<string | null>('All');
+  statusWiseRowCount = signal<Record<string, number>>({});
   isLoading = signal(false);
 
   onStatusClick(item: StatusButtonData) {
     this.activeStatus.set(item.value ?? null);
-
     this.isLoading.set(true);
     setTimeout(() => this.isLoading.set(false), 1000);
   }
@@ -396,6 +406,7 @@ export class B2bDashboard {
     { key: 'status', label: 'Status' },
     { key: 'user', label: 'User' },
     { key: 'provider', label: 'Provider' },
+    { key: 'actions', label: 'Actions' },
   ];
 
   // 🔹 visibility state per column

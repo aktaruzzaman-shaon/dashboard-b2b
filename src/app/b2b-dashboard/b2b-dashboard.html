@@ -136,11 +136,12 @@
             [data]="status"
             [active]="activeStatus() === status.value"
             [color]="
-              status.value === 'approved' ? 'sky' : status.value === 'rejected' ? 'sky' : 'sky'
+              status.value === 'Accepted' ? 'sky' : status.value === 'Rejected' ? 'sky' : 'sky'
             "
             [loading]="isLoading() && activeStatus() === status.value"
             size="md"
             (clicked)="onStatusClick($event)"
+            [statusWiseRowCount]="statusWiseRowCount()[status.value]"
           />
         }
       </div>
@@ -165,7 +166,7 @@
         [closeButton]="false"
       >
         <div class="grid md:grid-cols-4 sm:grid-cols-2 sm:gap-5 md:gap-2">
-          @for (singleColumn of tableColumns; track singleColumn.key) {
+          @for (singleColumn of tableColumns.slice(0, -1); track singleColumn.key) {
             <app-toggle-button
               [label]="singleColumn.label"
               [(checked)]="columnVisibility()[singleColumn.key]"
@@ -183,6 +184,8 @@
         [columnVisibility]="columnVisibility()"
         (selectionChange)="onSelectionChange($event)"
         [sliderSelectedDate]="sliderSelectedDate()"
+        [activeStatus]="activeStatus()"
+        (statusWiseRowCountChange)="statusWiseRowCount.set($event)"
       />
     </div>
 

@@ -14,8 +14,8 @@
       ></span>
     }
 
-    @if (!loading() && data().count !== undefined) {
-      <span [class]="badgeClasses()">{{ data().count }}</span>
+    @if (!loading() && statusWiseRowCount() !== null && statusWiseRowCount() !== undefined) {
+      <span [class]="badgeClasses()">{{ statusWiseRowCount() }}</span>
     }
   </button>
 </div>

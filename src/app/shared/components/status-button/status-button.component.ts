@@ -16,6 +16,7 @@ export class StatusButton {
   color = input<StatusColor>('sky');
   size = input<StatusSize>('md');
   autoSelect = input<boolean>(false);
+  statusWiseRowCount = input<number | null>(null);
 
   clicked = output<StatusButtonData>();
 

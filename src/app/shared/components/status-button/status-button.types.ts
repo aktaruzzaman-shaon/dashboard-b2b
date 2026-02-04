@@ -1,7 +1,6 @@
 export interface StatusButtonData {
-  label: string; // e.g. 'Pending'
-  count?: number; // e.g. 30
-  value?: string; // for filtering later
+  label: string;
+  value: 'Pending' | 'Accepted' | 'Rejected' | 'Cancelled' | 'All';
 }
 
 export type StatusSize = 'sm' | 'md' | 'lg';

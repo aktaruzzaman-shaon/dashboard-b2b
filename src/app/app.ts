@@ -80,7 +80,7 @@ export class App {
 
   // ----- for statu-button-----
   statuses = signal<StatusButtonData[]>([
-    { label: 'Pending', count: 30, value: 'pending' },
+    { label: 'Pending', value: 'Pending' },
     // { label: 'Approved', count: 12, value: 'approved' },
     // { label: 'Rejected', count: 5, value: 'rejected' },
   ]);
