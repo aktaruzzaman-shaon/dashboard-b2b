@@ -1,4 +1,13 @@
-import { Component, effect, EventEmitter, input, Input, output, Output, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  EventEmitter,
+  input,
+  Input,
+  output,
+  Output,
+  signal,
+} from '@angular/core';
 
 export interface DateRange {
   from: Date;
@@ -24,8 +33,8 @@ export class CalenderComponent {
   // Inputs
   label = input<string>('Select Date');
   placeholder = input<string>('DD/MM/YYYY');
-  dateRange = input<DateRange | null>(null); 
-  travelFromDate = input<Date | null>(null); 
+  dateRange = input<DateRange | null>(null);
+  travelFromDate = input<Date | null>(null);
   travelToDate = input<Date | null>(null);
 
   // Outputs
@@ -45,44 +54,15 @@ export class CalenderComponent {
 
   weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
-  // constructor() {
-  //   // Sync temp date with selected date from parent
-  //   effect(() => {
-  //     this.tempSelectedDate.set(this.selectedDate());
-  //   });
-  // }
-
   constructor() {
+    
     // Sync temp dates with selected dates from parent
     effect(() => {
+      
       this.tempFromDate.set(this.travelFromDate());
       this.tempToDate.set(this.travelToDate());
-      console.log(this.dateRange());
     });
   }
-
-  // toggleCalendar(): void {
-  //   this.isOpen = !this.isOpen;
-
-  //   // Set current month based on date range or selected date
-  //   if (this.dateRange()) {
-  //     this.currentMonth = new Date(
-  //       this.dateRange()!.from.getFullYear(),
-  //       this.dateRange()!.from.getMonth(),
-  //       1,
-  //     );
-  //   } else if (this.tempSelectedDate()) {
-  //     this.currentMonth = new Date(
-  //       this.tempSelectedDate()!.getFullYear(),
-  //       this.tempSelectedDate()!.getMonth(),
-  //       1,
-  //     );
-  //   } else {
-  //     this.currentMonth = new Date();
-  //   }
-
-  //   this.nextMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
-  // }
 
   toggleCalendar(): void {
     this.isOpen = !this.isOpen;
@@ -407,9 +387,7 @@ export class CalenderComponent {
   // }
 
   getDisplayValue(): string {
-    if (this.tempFromDate() && this.tempToDate()) {
-      return `${this.formatDate(this.tempFromDate())} - ${this.formatDate(this.tempToDate())}`;
-    } else if (this.tempFromDate()) {
+    if (this.tempFromDate()) {
       return this.formatDate(this.tempFromDate());
     } else if (this.tempToDate()) {
       return this.formatDate(this.tempToDate());

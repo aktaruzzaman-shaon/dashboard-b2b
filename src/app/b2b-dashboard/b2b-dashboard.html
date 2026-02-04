@@ -1,6 +1,9 @@
 <div class="">
   <div class="app-container flex flex-wrap items-end gap-4 w-full p-4">
+
+
     <!-- ======Travel Date range selection input ========-->
+
 
     <app-input-selector
       label="Travel Date Range"
@@ -8,11 +11,15 @@
       (selectionChange)="onDateRangeSelected($event)"
     ></app-input-selector>
 
+
+
     <!-- ========== Travel Date FROM and TO  =========== -->
+
+
 
     <!-- Travel From Date -->
     <app-calender
-      [label]="'Travel From'"
+      [label]="'Travel Date From'"
       [placeholder]="'Select travel dates'"
       [dateRange]="allowedDateRange()"
       [travelFromDate]="travelFrom()"
@@ -22,7 +29,7 @@
 
     <!-- Travel To Date -->
     <app-calender
-      [label]="'Travel To'"
+      [label]="'Travel Date To'"
       [placeholder]="'Select travel dates'"
       [dateRange]="allowedDateRange()"
       [travelToDate]="travelTo()"
@@ -30,7 +37,11 @@
       (toDateSelected)="onToDateSelected($event)"
     />
 
+
+
     <!-- ========== City Select =========== -->
+
+
 
     <app-single-select
       label="City"
@@ -38,7 +49,11 @@
       (selectChange)="onSelect($event)"
     ></app-single-select>
 
+
+
     <!-- ========== Supplier Status =========== -->
+
+
 
     <app-select-menu
       label="Supplier Status"
@@ -48,7 +63,9 @@
     >
     </app-select-menu>
 
+
     <!-- ========== Yacht Type =========== -->
+
 
     <app-select-menu
       label="Yacht Type"
@@ -58,14 +75,22 @@
     >
     </app-select-menu>
 
+
     <!-- ========== Booking Reference =========== -->
+
+
 
     <app-input-core label="Booking Reference Number"></app-input-core>
 
+
+
     <!-- ========== Advanced Search Portion =========== -->
 
+
+
+
     @if (advanceButtonOpen()) {
-      <button (click)="open()" class="pb-3 text-md text-blue-600 text-">Advance Access</button>
+      <button (click)="open()" class="pb-3 text-md text-blue-600 text-">Advance Search</button>
     }
 
     <app-toggle-component-container
@@ -115,13 +140,21 @@
     </app-toggle-component-container>
   </div>
 
+
   <!-- ================  Date Selections  ====================== -->
+
+
 
   <div class="app-container">
     <app-date-slider (dateSelected)="onSliderDateSelected($event)"></app-date-slider>
   </div>
 
+
+
   <!-- =============== Table Portions  ======================== -->
+
+
+
 
   <div class="app-container">
     <div class="flex justify-between">

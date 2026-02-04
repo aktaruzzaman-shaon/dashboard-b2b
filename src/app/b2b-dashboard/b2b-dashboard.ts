@@ -46,7 +46,10 @@ type ColumnKey = string;
   styleUrl: './b2b-dashboard.css',
 })
 export class B2bDashboard {
-  // Travel Date range selection input ===========================
+
+
+  //=============== Travel Date range selection input =================
+
 
   availableDateRanges: DateRangeOption[] = [
     { id: 'today', label: 'Today', value: { start: 1, end: 0 } },
@@ -57,49 +60,31 @@ export class B2bDashboard {
     { id: 'last-90', label: 'Last 90 days', value: { start: 1, days: 90 } },
   ];
 
-  // currentSelection: DateRangeOption[] = [];
   currentSelection = signal<DateRangeOption[]>([]);
-
   onDateRangeSelected(selectedItems: DateRangeOption[]) {
     console.log('Received new selection:', selectedItems);
     this.currentSelection.set(selectedItems);
   }
 
-  ////////////// For calender only portion //////////////
-  // from and to date calculation
 
-  //Travel Date FROM and TO  ====================================
-  // travelDateTo = signal<Date | null>(null);
-  // travelDateFrom = signal<Date | null>(null);
-  // onDateToSelected(date: Date | null): void {
-  //   console.log(date);
-  //   this.travelDateTo.set(date);
-  //   console.log('Travel Date To:', date);
-  // }
-  //
+
+
+
+  ////////////// For calender only portion /////////////
+
+
+
+
 
   allowedDateRange = signal<DateRange | null>(null);
-
-  // selectedDateRange = [{ id: 'd3-d7', label: 'Day 3 to Day 7', value: { start: 3, end: 7 } }];
-
   selectedDateRange = computed(() => this.currentSelection());
 
-
-  // constructor() {
-  //   effect(() => {
-  //     console.log('Selected Date Range changed:', this.selectedDateRange);
-  //     const currentRange = this.selectedDateRange;
-  //     this.getDateRange(this.selectedDateRange);
-  //   });
-  // }
-
   constructor() {
-  effect(() => {
-    const ranges = this.selectedDateRange();
-    this.getDateRange(ranges);
-  });
-}
-
+    effect(() => {
+      const ranges = this.selectedDateRange();
+      this.getDateRange(ranges);
+    });
+  }
 
   getDateRange(selectedDateRange: DateRangeOption[] | DateRangeOption) {
     const startDateArray = [];
@@ -138,31 +123,32 @@ export class B2bDashboard {
   rangeFromInput: string = '';
   rangeToInput: string = '';
 
-  setDateRange(): void {
-    console.log(this.rangeFromInput, this.rangeToInput);
-    const value = this.getDateRange(this.selectedDateRange()) ?? null;
-    this.allowedDateRange.set(value);
-    if (this.rangeFromInput && this.rangeToInput) {
-      const fromDate = new Date(this.rangeFromInput + 'T00:00:00');
-      const toDate = new Date(this.rangeToInput + 'T00:00:00');
-      const value = this.getDateRange(this.selectedDateRange());
-      // Validate that from is before to
-      if (fromDate <= toDate) {
-        this.allowedDateRange.set({ from: fromDate, to: toDate });
-        console.log(this.allowedDateRange());
+  // setDateRange(): void {
+  //   const value = this.getDateRange(this.selectedDateRange()) ?? null;
+  //   this.allowedDateRange.set(value);
 
-        // Clear travel dates if they're outside the new range
-        if (this.travelFrom() && !this.isDateInRange(this.travelFrom()!, fromDate, toDate)) {
-          this.travelFrom.set(null);
-        }
-        if (this.travelTo() && !this.isDateInRange(this.travelTo()!, fromDate, toDate)) {
-          this.travelTo.set(null);
-        }
-      } else {
-        alert('Range start date must be before or equal to range end date');
-      }
-    }
-  }
+  //   if (this.rangeFromInput && this.rangeToInput) {
+  //     const fromDate = new Date(this.rangeFromInput + 'T00:00:00');
+  //     const toDate = new Date(this.rangeToInput + 'T00:00:00');
+  //     const value = this.getDateRange(this.selectedDateRange());
+  //     console.log('Setting date range from inputs:', fromDate, toDate);
+  //     // Validate that from is before to
+  //     if (fromDate <= toDate) {
+  //       this.allowedDateRange.set({ from: fromDate, to: toDate });
+  //       console.log(this.allowedDateRange());
+
+  //       // Clear travel dates if they're outside the new range
+  //       if (this.travelFrom() && !this.isDateInRange(this.travelFrom()!, fromDate, toDate)) {
+  //         this.travelFrom.set(null);
+  //       }
+  //       if (this.travelTo() && !this.isDateInRange(this.travelTo()!, fromDate, toDate)) {
+  //         this.travelTo.set(null);
+  //       }
+  //     } else {
+  //       alert('Range start date must be before or equal to range end date');
+  //     }
+  //   }
+  // }
 
   clearDateRange(): void {
     this.allowedDateRange.set(null);
@@ -176,6 +162,7 @@ export class B2bDashboard {
   }
 
   onFromDateSelected(date: Date | null): void {
+    console.log('From date selected:', date);
     this.travelFrom.set(date);
   }
 
@@ -188,13 +175,13 @@ export class B2bDashboard {
     this.travelTo.set(null);
   }
 
-  confirmBooking(): void {
-    if (this.travelFrom() && this.travelTo()) {
-      alert(
-        `Booking confirmed!\nFrom: ${this.formatDisplayDate(this.travelFrom()!)}\nTo: ${this.formatDisplayDate(this.travelTo()!)}\nDuration: ${this.calculateTravelDuration()} days`,
-      );
-    }
-  }
+  // confirmBooking(): void {
+  //   if (this.travelFrom() && this.travelTo()) {
+  //     alert(
+  //       `Booking confirmed!\nFrom: ${this.formatDisplayDate(this.travelFrom()!)}\nTo: ${this.formatDisplayDate(this.travelTo()!)}\nDuration: ${this.calculateTravelDuration()} days`,
+  //     );
+  //   }
+  // }
 
   formatDisplayDate(date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
@@ -207,12 +194,12 @@ export class B2bDashboard {
   }
 
   // calculate travel duration
-  calculateTravelDuration(): number {
-    if (!this.travelFrom() || !this.travelTo()) return 0;
-    const diffTime = Math.abs(this.travelTo()!.getTime() - this.travelFrom()!.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  }
+  // calculateTravelDuration(): number {
+  //   if (!this.travelFrom() || !this.travelTo()) return 0;
+  //   const diffTime = Math.abs(this.travelTo()!.getTime() - this.travelFrom()!.getTime());
+  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  //   return diffDays;
+  // }
 
   // calculate range duration
   calculateRangeDuration(): number {
@@ -224,7 +211,13 @@ export class B2bDashboard {
     return diffDays + 1; // Include both start and end dates
   }
 
-  //City Select =============================
+
+
+
+  //================ City Select =============================
+
+
+
 
   protected readonly title = signal('dashboard');
   options = [
@@ -267,6 +260,8 @@ export class B2bDashboard {
     this.selectedData.set(data);
   }
 
+
+
   //Yacht Type =========================================
 
   // oleOptions = signal<SelectMenu[]>([
@@ -299,7 +294,12 @@ export class B2bDashboard {
   //   this.selectedData.set(data);
   // }
 
+
+
   // =========Advance Search Portion==========
+
+
+
   isContainerOpen = signal(false);
   advanceButtonOpen = signal(true);
   open() {
@@ -311,7 +311,11 @@ export class B2bDashboard {
     this.isContainerOpen.set(false);
   }
 
+
+
   //========== Advance Search Portion multiselect=========
+
+
 
   fruitOptions: MultiSelectOption[] = [
     { label: 'Apple', value: 'apple' },
@@ -368,7 +372,13 @@ export class B2bDashboard {
     this.selectedCountries = event.values;
   }
 
+
+
+
   // date slider portion===========================
+
+
+
 
   sliderSelectedDate = signal<Date | null>(null);
   onSliderDateSelected(date: Date) {
@@ -376,7 +386,11 @@ export class B2bDashboard {
     console.log('Slider selected date:', date);
   }
 
-  //Table portion===========================
+
+
+  //======================= Table portion=======================
+
+
 
   // for status buttons
   statuses = signal<StatusButtonData[]>([
