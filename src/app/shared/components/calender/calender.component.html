@@ -85,23 +85,23 @@
                   <button
                     (click)="selectDate(day, false)"
                     [disabled]="isDisabled(day, false)"
-                    [class.text-blue-600]="isInSelectedRange(day, false)"
-                    [class.text-red-700]="
+                    [class.text-black-600]="isInSelectedRange(day, false)"
+                    [class.text-black-500]="
                       (isInAllowedRange(day, false) &&
                         !isSelected(day, false) &&
                         !isInSelectedRange(day, false)) ??
                       false
                     "
-                    [class.border-2]="
+                    [class.border-white-500]="
                       (isRangeStart(day, false) || isRangeEnd(day, false)) &&
                       !isSelected(day, false)
                     "
-                    [class.border-green-500]="
+                    [class.bg-white-500]="
                       (isRangeStart(day, false) || isRangeEnd(day, false)) &&
                       !isSelected(day, false)
                     "
                     [class.text-sky-500]="isSelected(day, false)"
-                    [class.text-green-700]="isInAllowedRange(day, false) && !isSelected(day, false)"
+                    [class.text-black-700]="isInAllowedRange(day, false) && !isSelected(day, false)"
                     [class.font-semibold]="isInAllowedRange(day, false) || isSelected(day, false)"
                     [class.hover:bg-green-200]="
                       day &&
@@ -141,20 +141,20 @@
                   <button
                     (click)="selectDate(day, true)"
                     [disabled]="isDisabled(day, true)"
-                    [class.text-blue-600]="isInSelectedRange(day, true)"
-                    [class.text-green-700]="
+                    [class.text-black-700]="isInSelectedRange(day, true)"
+                    [class.text-black-700]="
                       isInAllowedRange(day, true) &&
                       !isSelected(day, true) &&
                       !isInSelectedRange(day, true)
                     "
-                    [class.border-2]="
+                    [class.bg-sky-500]="
                       (isRangeStart(day, true) || isRangeEnd(day, true)) && !isSelected(day, true)
                     "
                     [class.border-green-500]="
                       (isRangeStart(day, true) || isRangeEnd(day, true)) && !isSelected(day, true)
                     "
-                    [class.text-white]="isSelected(day, true)"
-                    [class.text-green-700]="isInAllowedRange(day, true) && !isSelected(day, true)"
+                    [class.text-sky-700]="isSelected(day, true)"
+                    [class.text-black-700]="isInAllowedRange(day, true) && !isSelected(day, true)"
                     [class.font-semibold]="isInAllowedRange(day, true) || isSelected(day, true)"
                     [class.hover:bg-green-200]="
                       day &&
