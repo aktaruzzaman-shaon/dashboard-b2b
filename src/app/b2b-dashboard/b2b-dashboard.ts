@@ -51,8 +51,8 @@ export class B2bDashboard {
   //=============== Travel Date range selection input =================
 
   availableDateRanges: DateRangeOption[] = [
-    { id: 'today', label: 'Today', value: { start: 1, end: 0 } },
-    { id: 'tomorrow', label: 'Tomorrow', value: { start: 2, end: 0 } },
+    { id: 'today', label: 'Today', value: { start: 0, end: 1 } },
+    { id: 'tomorrow', label: 'Tomorrow', value: { start: 0, end: 1 } },
     { id: 'd3-d7', label: 'Day 3 to Day 7', value: { start: 3, end: 7 } },
     { id: 'd7-d15', label: 'Day 7 to Day 15', value: { start: 7, end: 15 } },
     { id: 'd15-plus', label: 'Day 15 & Beyond', value: { start: 15, end: 365 } },
@@ -61,12 +61,12 @@ export class B2bDashboard {
 
   currentSelection = signal<DateRangeOption[]>([]);
   onDateRangeSelected(selectedItems: DateRangeOption[]) {
-    console.log('Received new selection:', selectedItems);
     this.currentSelection.set(selectedItems);
   }
 
-  ////////////// For calender only portion /////////////
+  // ================   For calender only portion========================
 
+  
   allowedDateRange = signal<DateRange | null>(null);
   selectedDateRange = computed(() => this.currentSelection());
 
