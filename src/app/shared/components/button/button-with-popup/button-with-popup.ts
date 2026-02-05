@@ -9,9 +9,14 @@ import { Component, input, signal } from '@angular/core';
 export class ButtonWithPopup {
   label = input<string>('Open Menu');
   isOpen = signal(false);
+  disabled = input<boolean>(false);
+
   toggle() {
-    this.isOpen.update((v) => !v);
+    if (!this.disabled()) {
+      this.isOpen.update((v) => !v);
+    }
   }
+
   close() {
     this.isOpen.set(false);
   }

@@ -18,6 +18,12 @@ export class TableComponent {
   sliderSelectedDate = input<Date | null>(null);
   activeStatus = input<string | null>(null);
   statusWiseRowCountChange = output<Record<string, number>>();
+  tableTravelStatus = output<string>();
+ 
+  tableStatus(status: string): void {
+    this.tableTravelStatus.emit(status);
+  }
+
 
   // 🔹 Original bookings data (immutable source)
   private readonly originalBookings: Booking[] = [
@@ -129,23 +135,22 @@ export class TableComponent {
   // }
 
   updateStatusCounts(data: any[]) {
-  const counts: Record<string, number> = {
-    Pending: 0,
-    Accepted: 0,
-    Rejected: 0,
-    Cancelled: 0,
-    All: data.length, // 👈 always original length
-  };
+    const counts: Record<string, number> = {
+      Pending: 0,
+      Accepted: 0,
+      Rejected: 0,
+      Cancelled: 0,
+      All: data.length, // 👈 always original length
+    };
 
-  for (const row of data) {
-    if (counts[row.status] !== undefined) {
-      counts[row.status]++;
+    for (const row of data) {
+      if (counts[row.status] !== undefined) {
+        counts[row.status]++;
+      }
     }
+
+    this.statusWiseRowCountChange.emit(counts);
   }
-
-  this.statusWiseRowCountChange.emit(counts);
-}
-
 
   // 🔹 Computed signal for sorted and filtered bookings
   bookings = computed(() => {

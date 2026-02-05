@@ -376,11 +376,33 @@ export class B2bDashboard {
   activeStatus = signal<string | null>('All');
   statusWiseRowCount = signal<Record<string, number>>({});
   isLoading = signal(false);
+  tableStatusData = signal<string | null>(null);
+  // showReminders = signal<boolean>(false);
+  // showUpdateSupplier = signal<boolean>(false);
+  // showAccept = signal<boolean>(false);
+  // showBookings = signal<boolean>(false);
+
+  // for dynamic ui changes based on table status
+  uiState = computed(() => {
+    const status = this.tableStatusData();
+
+    return {
+      showReminders: status === 'Pending',
+      showUpdateSupplier: status === 'Accepted',
+      showAccept: status === 'Pending',
+      showBookings: status === 'Accepted',
+    };
+  });
 
   onStatusClick(item: StatusButtonData) {
     this.activeStatus.set(item.value ?? null);
     this.isLoading.set(true);
     setTimeout(() => this.isLoading.set(false), 1000);
+  }
+
+  onTableTravelStatus(status: string) {
+    this.tableStatusData.set(status);
+    console.log('Travel status from table:', status);
   }
 
   // table column modification button

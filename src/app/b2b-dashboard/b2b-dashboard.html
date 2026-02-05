@@ -186,6 +186,7 @@
         [sliderSelectedDate]="sliderSelectedDate()"
         [activeStatus]="activeStatus()"
         (statusWiseRowCountChange)="statusWiseRowCount.set($event)"
+        (tableTravelStatus)="onTableTravelStatus($event)"
       />
     </div>
 
@@ -240,7 +241,7 @@
         </div>
 
         <div class="flex gap-2">
-          <app-button-with-popup label="Show Reminders">
+          <app-button-with-popup label="Show Reminders" [disabled]="!uiState().showReminders">
             <div class="flex flex-col mx-5">
               <button
                 class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
@@ -262,7 +263,7 @@
               </button>
             </div>
           </app-button-with-popup>
-          <app-button-with-popup label="Update Supplier">
+          <app-button-with-popup label="Update Supplier" [disabled]="!uiState().showUpdateSupplier">
             <div class="flex flex-col divide-y divide-gray-100">
               <button
                 class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
@@ -278,13 +279,13 @@
               >
                 <div class="flex items-center gap-3">
                   <i class="text-xl text-gray-700">🖨️</i>
-                  <span class="font-medium text-gray-800">Print Job</span>
+                  <span class="font-medium text-gray-800">Facebook</span>
                 </div>
                 <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
               </button>
             </div>
           </app-button-with-popup>
-          <app-button-with-popup label="Accept">
+          <app-button-with-popup label="Accept" [disabled]="!uiState().showAccept">
             <div class="flex flex-col divide-y divide-gray-100">
               <button
                 class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
@@ -300,29 +301,30 @@
               >
                 <div class="flex items-center gap-3">
                   <i class="text-xl text-gray-700">🖨️</i>
-                  <span class="font-medium text-gray-800">Print Job</span>
+                  <span class="font-medium text-gray-800">Facebook</span>
                 </div>
                 <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
               </button>
             </div>
           </app-button-with-popup>
-          <app-button-with-popup label="Bookings">
+          <app-button-with-popup label="Bookings" [disabled]="!uiState().showBookings">
             <div class="flex flex-col divide-y divide-gray-100">
               <button
-                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
+                class="flex items-center justify-between p-1 hover:bg-gray-50 transition-colors group"
               >
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3"> 
                   <i class="text-xl text-gray-700">💬</i>
-                  <span class="font-medium text-gray-800">WhatsApp Reminder</span>
+                  <span class="font-medium text-gray-800">Modify Date/Time</span>
                 </div>
                 <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
               </button>
+
               <button
-                class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group text-left"
+                class="flex items-center justify-between p-1 hover:bg-gray-50 transition-colors group text-left"
               >
                 <div class="flex items-center gap-3">
                   <i class="text-xl text-gray-700">🖨️</i>
-                  <span class="font-medium text-gray-800">Print Job</span>
+                  <span class="font-medium text-gray-800">Cancel</span>
                 </div>
                 <span class="text-gray-400 group-hover:translate-x-1 transition-transform">❯</span>
               </button>
