@@ -64,9 +64,13 @@ export class B2bDashboard {
     this.currentSelection.set(selectedItems);
   }
 
+  onDateRangeSelected($event) {
+    console.log('Selected Date Range:', $event);
+    // You can perform additional actions here based on the selected date range
+  }
+
   // ================   For calender only portion========================
 
-  
   allowedDateRange = signal<DateRange | null>(null);
   selectedDateRange = computed(() => this.currentSelection());
 
