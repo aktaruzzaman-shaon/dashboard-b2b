@@ -1,13 +1,13 @@
 <!-- Full Screen Overlay - appears behind dropdown but above other content -->
 @if (isOpen()) {
-  <div 
-    class="fixed inset-0  bg-black/20"
+  <div
+    class="fixed inset-0 bg-black/20"
     [style.z-index]="zIndex() - 1"
     (click)="toggleDropdown()"
   ></div>
 }
 
-<div class="relative min-w-80 w-full max-w-sm" [style.z-index]="zIndex()">
+<div class="relative w-full max-w-sm" [style.z-index]="zIndex()">
   <!-- Label -->
   @if (label()) {
     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -46,8 +46,15 @@
       <!-- Rest of the dropdown content stays exactly the same -->
       <!-- Search Box -->
       <div class="p-4 border-b border-gray-100">
-        <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-          <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div
+          class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500 transition-all"
+        >
+          <svg
+            class="w-4 h-4 text-gray-400 flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -70,7 +77,12 @@
               (click)="search.set(''); $event.stopPropagation()"
             >
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           }
@@ -80,9 +92,7 @@
       <!-- Options List -->
       <div class="overflow-y-auto px-4 py-2 flex-1">
         @if (filteredOptions().length === 0) {
-          <div class="py-8 text-center text-gray-400 text-sm">
-            No options found
-          </div>
+          <div class="py-8 text-center text-gray-400 text-sm">No options found</div>
         } @else {
           @for (opt of filteredOptions(); track opt.value) {
             <label
@@ -91,7 +101,7 @@
               <span class="text-sm text-gray-700 flex-1">{{ opt.label }}</span>
               <input
                 type="checkbox"
-                class="w-4 h-4 rounded border-gray-300 text-blue-600  accent-blue-600 cursor-pointer flex-shrink-0"
+                class="w-4 h-4 rounded border-gray-300 text-blue-600 accent-blue-600 cursor-pointer flex-shrink-0"
                 [checked]="isChecked(opt.value)"
                 (change)="toggleOption(opt.value)"
                 (click)="$event.stopPropagation()"
