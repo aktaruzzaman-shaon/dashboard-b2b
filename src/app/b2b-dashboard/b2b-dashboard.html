@@ -67,7 +67,8 @@
     <!-- ========== Booking Reference =========== -->
 
     <app-input-core label="Booking Reference Number"></app-input-core>
-
+    </div>
+    <div>
     <!-- ========== Advanced Search Portion =========== -->
 
     @if (advanceButtonOpen()) {
@@ -77,7 +78,7 @@
     <app-toggle-component-container
       [isOpen]="isContainerOpen()"
       (closed)="close()"
-      name="Advance Accress"
+      name="Advance Search"
     >
       <div>
         <app-multi-select
