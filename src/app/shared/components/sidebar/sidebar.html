@@ -1,23 +1,17 @@
-<!-- Mobile Overlay -->
-@if (isMobileMenuOpen()) {
-  <div class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" (click)="toggleMobileMenu()"></div>
-}
-
 <!-- Sidebar -->
 <aside
-  [class.translate-x-0]="isMobileMenuOpen()"
   [class.w-20]="!isSidebarExpanded()"
   [class.w-64]="isSidebarExpanded()"
-  class="fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-50 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto overflow-y-auto"
+  class="fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-50 transition-all duration-300 ease-in-out lg:static lg:z-auto overflow-y-auto"
 >
   <!-- Logo -->
-  <div class="p-4 border-b border-gray-200">
-    <div class="flex items-center space-x-2 justify-center lg:justify-start">
+  <div class="p-4 border-b border-gray-200 flex justify-center">
+    <div class="flex items-center space-x-2 justify-center">
       <div class="w-10 h-10 flex items-center justify-center text-lg font-bold text-blue-600">
         R
       </div>
       @if (isSidebarExpanded()) {
-        <span class="hidden lg:block font-bold text-gray-800">Rayna</span>
+        <span class="font-bold text-gray-800">Rayna</span>
       }
     </div>
   </div>
@@ -44,7 +38,7 @@
             }
 
             @if (isSidebarExpanded()) {
-              <span class="hidden lg:block text-sm font-medium text-gray-700 group-hover:text-gray-900">
+              <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">
                 {{ item.label }}
               </span>
             }
@@ -54,7 +48,7 @@
           @if (item.children && isSidebarExpanded()) {
             <svg
               [class.rotate-180]="item.expanded"
-              class="hidden lg:block w-4 h-4 text-gray-400 transition-transform"
+              class="w-4 h-4 text-gray-400 transition-transform"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -71,7 +65,7 @@
 
         <!-- Child Menu Items -->
         @if (item.children && item.expanded && isSidebarExpanded()) {
-          <div class="hidden lg:block ml-4 mt-1 space-y-1 border-l-2 border-gray-200 pl-4">
+          <div class="ml-4 mt-1 space-y-1 border-l-2 border-gray-200 pl-4">
             @for (child of item.children; track child.label) {
               <a
                 [routerLink]="child.route"

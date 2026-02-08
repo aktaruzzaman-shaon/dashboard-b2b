@@ -53,7 +53,7 @@ export class App {
   @ViewChild(Sidebar) sidebarComponent!: Sidebar;
 
   onToggleSidebar(): void {
-    this.sidebarComponent.toggleMobileMenu();
+    this.sidebarComponent.toggleSidebarExpanded();
   }
   // /----- for select component --------/
   protected readonly title = signal('dashboard');

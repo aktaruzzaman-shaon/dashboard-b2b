@@ -21,8 +21,7 @@ interface MenuItem {
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
-  isMobileMenuOpen = signal(false);
-  isSidebarExpanded = signal(true);
+  isSidebarExpanded = signal(false);
   menuItems: MenuItem[] = [
     {
       label: 'Bookings',
@@ -67,20 +66,24 @@ export class Sidebar {
     return typeof icon === 'function';
   }
 
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen.update(value => !value);
+  toggleSidebarExpanded(): void {
+    this.isSidebarExpanded.update(value => !value);
   }
 
   expandSidebar(): void {
     this.isSidebarExpanded.set(true);
   }
 
+  collapseSidebar(): void {
+    this.isSidebarExpanded.set(false);
+  }
+
   toggleMenuItem(item: MenuItem): void {
+    // Always expand sidebar when clicking any menu item
+    this.expandSidebar();
+    
     if (item.children) {
       item.expanded = !item.expanded;
-    } else {
-      // Expand sidebar when clicking any menu item
-      this.expandSidebar();
     }
   }
 }
