@@ -20,3 +20,22 @@ aside::-webkit-scrollbar-thumb {
 aside::-webkit-scrollbar-thumb:hover {
   background: #a0aec0;
 }
+/* Collapsed sidebar styles */
+@media (min-width: 1024px) {
+  aside.w-20 {
+    width: 5rem;
+  }
+
+  aside.w-64 {
+    width: 16rem;
+  }
+
+  /* Ensure icons are centered when collapsed */
+  aside.w-20 nav {
+    @apply px-2;
+  }
+
+  aside.w-20 nav > div > div {
+    @apply justify-center;
+  }
+}

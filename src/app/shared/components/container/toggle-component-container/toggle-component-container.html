@@ -1,9 +1,9 @@
 @if (isOpen()) {
   <div
-    class="relative  w-full rounded-2xl bg-white p-6 border border-gray-300"
+    class="relative w-full rounded-2xl bg-white p-6 border border-gray-300"
     [style.z-index]="zIndex()"
   >
-    <div class="flex items-center text-sm font-semibold text-gray-700">
+    <div class="flex items-center text-lg font-semibold text-gray-700">
       {{ name() }}
     </div>
     @if (closeButton()) {
@@ -26,7 +26,7 @@
       </button>
     }
 
-    <div class="w-full grid grid-cols-5 gap-2 items-center">
+    <div class="w-full grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 w-full p-4">
       <ng-content></ng-content>
     </div>
   </div>

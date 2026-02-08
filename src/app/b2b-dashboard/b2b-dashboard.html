@@ -1,127 +1,142 @@
 <div class="w-full">
-  <div
-    class="app-container grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-4 w-full p-4"
-  >
-    <!-- ======Travel Date range selection input ========-->
+  <div class="app-container">
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 w-full p-4">
+      <!-- ======Travel Date range selection input ========-->
 
-    <app-input-selector
-      label="Travel Date Range"
-      [options]="availableDateRanges"
-      (selectionChange)="onDateRangeSelected($event)"
-    ></app-input-selector>
+      <app-input-selector
+        label="Travel Date Range"
+        [options]="availableDateRanges"
+        (selectionChange)="onDateRangeSelected($event)"
+      ></app-input-selector>
 
-    <!-- ========== Travel Date FROM and TO  =========== -->
+      <!-- ========== Travel Date FROM and TO  =========== -->
 
-    <!-- Travel From Date -->
-    <app-calender
-      [label]="'Travel Date From'"
-      [isCustomMode]="isCustomMode()"
-      [placeholder]="'Select travel dates'"
-      [dateRange]="allowedDateRange()"
-      [travelFromDate]="travelFrom()"
-      [showDateType]="'fromDate'"
-      [travelToDate]="travelTo()"
-      (fromDateSelected)="onFromDateSelected($event)"
-      (toDateSelected)="onToDateSelected($event)"
-    />
+      <!-- Travel From Date -->
+      <app-calender
+        [label]="'Travel Date From'"
+        [isCustomMode]="isCustomMode()"
+        [placeholder]="'Select travel dates'"
+        [dateRange]="allowedDateRange()"
+        [travelFromDate]="travelFrom()"
+        [showDateType]="'fromDate'"
+        [travelToDate]="travelTo()"
+        (fromDateSelected)="onFromDateSelected($event)"
+        (toDateSelected)="onToDateSelected($event)"
+      />
 
-    <!-- Travel To Date -->
-    <app-calender
-      [label]="'Travel Date To'"
-      [placeholder]="'Select travel dates'"
-      [isCustomMode]="isCustomMode()"
-      [showDateType]="'toDate'"
-      [dateRange]="allowedDateRange()"
-      [travelFromDate]="travelFrom()"
-      [travelToDate]="travelTo()"
-      (fromDateSelected)="onFromDateSelected($event)"
-      (toDateSelected)="onToDateSelected($event)"
-    />
+      <!-- Travel To Date -->
+      <app-calender
+        [label]="'Travel Date To'"
+        [placeholder]="'Select travel dates'"
+        [isCustomMode]="isCustomMode()"
+        [showDateType]="'toDate'"
+        [dateRange]="allowedDateRange()"
+        [travelFromDate]="travelFrom()"
+        [travelToDate]="travelTo()"
+        (fromDateSelected)="onFromDateSelected($event)"
+        (toDateSelected)="onToDateSelected($event)"
+      />
 
-    <!-- ========== City Select =========== -->
+      <!-- ========== City Select =========== -->
 
-    <app-single-select
-      label="City"
-      [items]="options"
-      (selectChange)="onSelect($event)"
-    ></app-single-select>
+      <app-single-select
+        label="City"
+        [items]="options"
+        (selectChange)="onSelect($event)"
+      ></app-single-select>
 
-    <!-- ========== Supplier Status =========== -->
+      <!-- ========== Supplier Status =========== -->
 
-    <app-select-menu
-      label="Supplier Status"
-      [options]="roleOptions()"
-      placeholder="Choose an Action"
-      (onSelection)="handleData($event)"
-    >
-    </app-select-menu>
+      <app-select-menu
+        label="Supplier Status"
+        [options]="roleOptions()"
+        placeholder="Choose an Action"
+        (onSelection)="handleData($event)"
+      >
+      </app-select-menu>
 
-    <!-- ========== Yacht Type =========== -->
+      <!-- ========== Yacht Type =========== -->
 
-    <app-select-menu
-      label="Yacht Type"
-      [options]="roleOptions()"
-      placeholder="Choose an Action"
-      (onSelection)="handleData($event)"
-    >
-    </app-select-menu>
+      <app-select-menu
+        label="Yacht Type"
+        [options]="roleOptions()"
+        placeholder="Choose an Action"
+        (onSelection)="handleData($event)"
+      >
+      </app-select-menu>
 
-    <!-- ========== Booking Reference =========== -->
+      <!-- ========== Booking Reference =========== -->
 
-    <app-input-core label="Booking Reference Number"></app-input-core>
-  </div>
-  <div>
+      <app-input-core label="Booking Reference Number"></app-input-core>
+
+      <!-- ========== Advance Search Button =========== -->
+
+      @if (advanceButtonOpen()) {
+        <button (click)="open()" class="pt-4 text-md text-blue-600 text-start">
+          Advance Search
+        </button>
+      }
+    </div>
+
     <!-- ========== Advanced Search Portion =========== -->
 
-    @if (advanceButtonOpen()) {
-      <button (click)="open()" class="pb-3 text-md text-blue-600 text-">Advance Search</button>
-    }
+    <div class="p-4">
+      <app-toggle-component-container
+        [isOpen]="isContainerOpen()"
+        (closed)="close()"
+        name="Advance Search"
+      >
+        <div>
+          <app-multi-select
+            id="fruits"
+            label="Category"
+            [options]="fruitOptions"
+            placeholder="Choose your favorite Category..."
+            (done)="onFruitSelection($event)"
+          />
+        </div>
 
-    <app-toggle-component-container
-      [isOpen]="isContainerOpen()"
-      (closed)="close()"
-      name="Advance Search"
-    >
-      <div>
-        <app-multi-select
-          id="fruits"
-          label="Category"
-          [options]="fruitOptions"
-          placeholder="Choose your favorite Category..."
-          (done)="onFruitSelection($event)"
-        />
-      </div>
+        <div>
+          <app-multi-select
+            id="colors"
+            label="Option Name"
+            [options]="colorOptions"
+            placeholder="Choose your Option Name ..."
+            (done)="onColorSelection($event)"
+          />
+        </div>
 
-      <div>
-        <app-multi-select
-          id="colors"
-          label="Option Name"
-          [options]="colorOptions"
-          placeholder="Choose your Option Name ..."
-          (done)="onColorSelection($event)"
-        />
-      </div>
+        <div>
+          <app-multi-select
+            id="countries"
+            label="Supplier"
+            [options]="countryOptions"
+            placeholder="Choose Supplier to visit..."
+            (done)="onCountrySelection($event)"
+          />
+        </div>
 
-      <div>
-        <app-multi-select
-          id="countries"
-          label="Supplier"
-          [options]="countryOptions"
-          placeholder="Choose Supplier to visit..."
-          (done)="onCountrySelection($event)"
-        />
-      </div>
+        <div>
+          <app-multi-select
+            id="provider"
+            label="Provider"
+            [options]="countryOptions"
+            placeholder="Choose Provider to visit..."
+            (done)="onCountrySelection($event)"
+          />
+        </div>
 
-      <div>
-        <app-multi-select
-          id="provider"
-          label="Provider"
-          [options]="countryOptions"
-          placeholder="Choose Provider to visit..."
-          (done)="onCountrySelection($event)"
-        />
-      </div>
-    </app-toggle-component-container>
+        <div>
+          <app-multi-select
+            id="provider"
+            label="Provider"
+            [options]="countryOptions"
+            placeholder="Choose Provider to visit..."
+            (done)="onCountrySelection($event)"
+          />
+        </div>
+      </app-toggle-component-container>
+    </div>
   </div>
 
   <!-- ================  Date Selections  ====================== -->
@@ -170,7 +185,7 @@
         [isOpen]="isTableModificationContainerOpen()"
         [closeButton]="false"
       >
-        <div class="grid md:grid-cols-4 sm:grid-cols-2 sm:gap-5 md:gap-2">
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
           @for (singleColumn of tableColumns.slice(0, -1); track singleColumn.key) {
             <app-toggle-button
               [label]="singleColumn.label"

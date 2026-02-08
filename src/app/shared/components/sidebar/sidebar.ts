@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Type } from '@angular/core';
+import { Component, Type, signal, computed } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { BookingIconComponent } from '../../../../icons/BookingIcon';
 import { OperationsIconComponent } from '../../../../icons/OperationsIcon';
@@ -21,7 +21,8 @@ interface MenuItem {
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
-  isSidebarOpen = false;
+  isMobileMenuOpen = signal(false);
+  isSidebarExpanded = signal(true);
   menuItems: MenuItem[] = [
     {
       label: 'Bookings',
@@ -62,19 +63,24 @@ export class Sidebar {
     },
   ];
 
-  ngOnInit(): void {}
-
   isComponent(icon: any): boolean {
     return typeof icon === 'function';
   }
 
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen.update(value => !value);
+  }
+
+  expandSidebar(): void {
+    this.isSidebarExpanded.set(true);
   }
 
   toggleMenuItem(item: MenuItem): void {
     if (item.children) {
       item.expanded = !item.expanded;
+    } else {
+      // Expand sidebar when clicking any menu item
+      this.expandSidebar();
     }
   }
 }
