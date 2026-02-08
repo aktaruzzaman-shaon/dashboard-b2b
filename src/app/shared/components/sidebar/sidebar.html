@@ -65,7 +65,7 @@
 
         <!-- Child Menu Items -->
         @if (item.children && item.expanded && isSidebarExpanded()) {
-          <div class="ml-4 mt-1 space-y-1 border-l-2 border-gray-200 pl-4">
+          <div class="ml-4 mt-1 space-y-1 pl-4">
             @for (child of item.children; track child.label) {
               <a
                 [routerLink]="child.route"

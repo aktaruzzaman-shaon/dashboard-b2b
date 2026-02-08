@@ -67,7 +67,7 @@ export class Sidebar {
   }
 
   toggleSidebarExpanded(): void {
-    this.isSidebarExpanded.update(value => !value);
+    this.isSidebarExpanded.update((value) => !value);
   }
 
   expandSidebar(): void {
@@ -81,7 +81,7 @@ export class Sidebar {
   toggleMenuItem(item: MenuItem): void {
     // Always expand sidebar when clicking any menu item
     this.expandSidebar();
-    
+
     if (item.children) {
       item.expanded = !item.expanded;
     }
