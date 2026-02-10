@@ -3,10 +3,11 @@ import { Booking } from './table.types';
 import { ModalComponent } from '../modal/modal.component';
 import { IconButtonPopup } from '../button/icon-button-popup/icon-button-popup';
 import { MultiSelect, MultiSelectOption } from '../select/multi-select/multi-select.component';
+import { BookingDetails } from "../composit/booking-details/booking-details";
 
 @Component({
   selector: 'app-table',
-  imports: [ModalComponent, IconButtonPopup, MultiSelect],
+  imports: [ModalComponent, IconButtonPopup, MultiSelect, BookingDetails],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
@@ -20,6 +21,8 @@ export class TableComponent {
   activeStatus = input<string | null>(null);
   statusWiseRowCountChange = output<Record<string, number>>();
   tableTravelStatus = output<string>();
+  selectedReference = signal<string | null>(null);
+  showDetail = signal(false);
 
   showOptionHeaderSelect = signal(false);
   selectedOptions = signal<string[]>([]);
@@ -308,6 +311,16 @@ export class TableComponent {
 
   closeModal(): void {
     this.isModalOpen.set(false);
+  }
+
+  // for the details button
+  openDetail(ref: string) {
+    this.selectedReference.set(ref);
+    this.showDetail.set(true);
+  }
+
+  closeDetail() {
+    this.showDetail.set(false);
   }
 
   submitModal(): void {

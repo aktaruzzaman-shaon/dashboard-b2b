@@ -1,0 +1,22 @@
+<div class="fixed inset-0 z-50 bg-white">
+  <nav class="p-4 border-b flex items-center gap-4 bg-white">
+    <button (click)="goBack.emit()" class="p-2 hover:bg-gray-100 rounded-full">
+      <svg>...</svg>
+    </button>
+    <span class="font-semibold text-lg">Booking Details</span>
+  </nav>
+
+  <div class="p-8 max-w-4xl mx-auto">
+    @if (isLoading()) {
+      <div class="animate-pulse">Loading detailed information...</div>
+    } @else if (bookingDetails()) {
+      <h2 class="text-2xl font-bold">{{ bookingDetails().customerName }}</h2>
+      <div class="grid grid-cols-2 gap-4 mt-6">
+        <div class="p-4 bg-gray-50 rounded">
+          <label class="text-xs text-gray-500">Flight Status</label>
+          <p>{{ bookingDetails().status }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>
